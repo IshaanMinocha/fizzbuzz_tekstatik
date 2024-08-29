@@ -3,12 +3,14 @@ import path from 'path';
 import axios from 'axios';
 import readline from 'readline';
 import envConfig from '../config/dotenv.js';
+import os from 'os';
 
 envConfig();
 
 const backendUrl = process.env.BACKEND_URL;
+const homeDir = os.homedir();
 
-const tokenFilePath = path.resolve(process.env.HOME, '.fizzbuzz_token');
+const tokenFilePath = path.resolve(homeDir, '.fizzbuzz_token');
 
 export const readToken = () => {
     if (fs.existsSync(tokenFilePath)) {
