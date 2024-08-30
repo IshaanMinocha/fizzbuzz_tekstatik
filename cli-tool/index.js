@@ -4,6 +4,7 @@ import { program } from 'commander';
 import connectDb from './config/db.js';
 import { readToken, login, logout } from './lib/Auth.js';
 import { greetUser } from './lib/Greet.js';
+import { runWfuzz } from './lib/wfuzz.js';
 
 await connectDb();
 
@@ -37,7 +38,46 @@ program
             await greetUser(options.greet);
             process.exit(0);
         }
-    });
+});
+
+program
+    .command('fuzz <url>')
+    // .description('Fuzz a target URL using wfuzz')
+    .option('-w, --wordlist <path>', 'Path to the wordlist')
+    .option('-H, --header <header>', 'Add headers to the request')
+    .option('-b, --cookie <cookie>', 'Add cookies to the request')
+    .option('-d, --data <data>', 'Send data in the body of the request (for POST requests)')
+    .option('-X, --method <method>', 'Specify the HTTP method (GET, POST, etc.)')
+    .option('-t, --threads <number>', 'Number of threads')
+    .option('-c, --color', 'Show output in color')
+    .action((url, options) => {
+        const flags = [];
+
+        if (options.wordlist) {
+            flags.push(`-z file,${options.wordlist}`);
+        }
+        if (options.header) {
+            flags.push(`-H "${options.header}"`);
+        }
+        if (options.cookie) {
+            flags.push(`-b "${options.cookie}"`);
+        }
+        if (options.data) {
+            flags.push(`-d "${options.data}"`);
+        }
+        if (options.method) {
+            flags.push(`-X ${options.method}`);
+        }
+        if (options.threads) {
+            flags.push(`-t ${options.threads}`);
+        }
+        if (options.color) {
+            flags.push('-c');
+        }
+
+        runWfuzz(url, flags);
+});
+
 
 program.parse(process.argv);
 
