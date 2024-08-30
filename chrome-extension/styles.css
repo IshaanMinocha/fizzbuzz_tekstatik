@@ -1,0 +1,29 @@
+body {
+  font-family: Arial, sans-serif;
+  padding: 10px;
+}
+
+h1 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+#report {
+  margin-top: 20px;
+}
+
+.vuln-item {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+.vuln-item h3 {
+  margin: 0 0 5px;
+  color: #d9534f;
+}
+
+.vuln-item p {
+  margin: 0;
+}
