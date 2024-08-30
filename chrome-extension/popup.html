@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vulnerability Checker</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      width: 200px;
+      width: 400px;
+      overflow: auto;
     }
     button {
       padding: 10px;
@@ -12,12 +16,41 @@
       width: 100%;
       margin-top: 10px;
     }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: left;
+      word-wrap: break-word;
+      white-space: normal;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+    td {
+      max-width: 150px;
+      overflow-wrap: break-word; 
+    }
   </style>
 </head>
 <body>
   <h2>Vulnerability Checker</h2>
   <button id="highlightBtn">Highlight Elements</button>
-
+  <button id="logRequestsBtn">Log Requests</button>
+  <table id="requestsTable">
+    <thead>
+      <tr>
+        <th>Request</th>
+        <th>Type</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Entries will be added here -->
+    </tbody>
+  </table>
   <script src="popup.js"></script>
 </body>
 </html>
