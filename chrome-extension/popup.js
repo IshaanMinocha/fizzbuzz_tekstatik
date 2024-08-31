@@ -60,12 +60,14 @@ function highlightRequestGeneratingElements() {
 function injectNetworkLogger() {
   const observer = new PerformanceObserver((list) => {
     const entries = list.getEntries();
+
     entries.forEach(entry => {
       if (entry.initiatorType === 'xmlhttprequest') {
         chrome.runtime.sendMessage({
           type: 'xmlhttprequest',
           url: entry.name,
-          initiatorType: entry.initiatorType
+          initiatorType: entry.initiatorType,
+          status : entry.responseStatus
         });
       }
     });
@@ -79,7 +81,8 @@ function injectNetworkLogger() {
       chrome.runtime.sendMessage({
         type: 'xmlhttprequest',
         url: entry.name,
-        initiatorType: entry.initiatorType
+        initiatorType: entry.initiatorType,
+        status : entry.responseStatus
       });
     }
   });
@@ -87,22 +90,25 @@ function injectNetworkLogger() {
 
 // Listen for messages from the injected script
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.type === 'xmlhttprequest') {
+  if (message.type === 'xmlhttprequest' && message.status !== 0) {  
     const tableBody = document.querySelector('#requestsTable tbody');
     if (tableBody) {
       const row = document.createElement('tr');
       const requestCell = document.createElement('td');
       const typeCell = document.createElement('td');
       const link = document.createElement('a');
+      const statusCell = document.createElement('td');
       link.href = message.url;
       link.textContent = message.url;
       link.target = '_blank';
+      link.title = message.url;
       requestCell.appendChild(link);
-
+      statusCell.textContent = message.status;
       typeCell.textContent = message.initiatorType;
 
       row.appendChild(requestCell);
       row.appendChild(typeCell);
+      row.appendChild(statusCell);
       tableBody.appendChild(row);
     }
   }
