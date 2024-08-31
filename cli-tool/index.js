@@ -75,6 +75,8 @@ program
             flags.push('-c');
         }
 
+        
+
         runWfuzz(url, flags);
 });
 
