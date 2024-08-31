@@ -4,7 +4,7 @@ import path from 'path';
 
 export const runWfuzz = (url, flags) => {
     // resolve path to the Python script
-    const pythonScriptPath = path.resolve('pyscripts/wfuzz_script.py');
+    const pythonScriptPath = path.resolve('/Users/chayanmann/Desktop/fizzbuzz_tekstatic/pyscripts/wfuzz_script.py');
     
     const command = `python3 ${pythonScriptPath} ${url} ${flags.join(' ')}`;
     
@@ -19,6 +19,6 @@ export const runWfuzz = (url, flags) => {
             console.error(`Error: ${stderr}`);
             return;
         }
-        console.log(`Fuzzing results:\n${stdout}`);
+        console.log(`Fuzzing results in JSON format:\n${stdout}`);
     });
 };
