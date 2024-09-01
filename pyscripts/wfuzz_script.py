@@ -45,4 +45,4 @@ if __name__ == "__main__":
     else:
         results = parse_output(stdout)
         json_output = json.dumps(results, indent=4)
-        print(json_output)
+        print("json output:::" + json_output)

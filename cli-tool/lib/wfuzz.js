@@ -15,7 +15,7 @@ export const runWfuzz = (url, flags) => {
 
     console.log(`Running command: ${command}`);
 
-    exec(command, (error, stdout, stderr) => {
+    exec(command, async (error, stdout, stderr) => {
         if (error) {
             console.error(`Error executing wfuzz: ${error.message}`);
             return;
@@ -24,6 +24,13 @@ export const runWfuzz = (url, flags) => {
             console.error(`Error: ${stderr}`);
             return;
         }
-        console.log(`Fuzzing results in JSON format:\n${stdout}`);
+        try {
+            console.log(`Fuzzing results in JSON format:\n${stdout}`);
+            const fuzzResultData = JSON.parse(stdout);
+            await saveFuzzResult(fuzzResultData);
+            process.exit(1);
+        } catch (parseError) {
+            console.error(`Error parsing JSON output: ${parseError.message}`);
+        }
     });
 };
