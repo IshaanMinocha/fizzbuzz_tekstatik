@@ -1,15 +1,20 @@
-
 import { exec } from 'child_process';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// console.log(path.join(__dirname, '../../pyscripts/wfuzz_script.py'))
 
 export const runWfuzz = (url, flags) => {
-    // resolve path to the Python script
-    const pythonScriptPath = path.resolve('/Users/chayanmann/Desktop/fizzbuzz_tekstatic/pyscripts/wfuzz_script.py');
-    
-    const command = `python3 ${pythonScriptPath} ${url} ${flags.join(' ')}`;
-    
+    const pythonScriptPath = path.join(__dirname, '../../pyscripts/wfuzz_script.py');
+
+    const command = `python "${pythonScriptPath}" ${url} ${flags.join(' ')}`; //win
+    // const command = `python3 ${pythonScriptPath} ${url} ${flags.join(' ')}`; //mac
+
     console.log(`Running command: ${command}`);
-    
+
     exec(command, (error, stdout, stderr) => {
         if (error) {
             console.error(`Error executing wfuzz: ${error.message}`);

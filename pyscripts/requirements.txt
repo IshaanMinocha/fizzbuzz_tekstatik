@@ -1,0 +1,10 @@
+pycurl==7.45.3
+pyparsing==3.1.4
+chardet==5.2.0
+colorama==0.4.4
+wfuzz==3.0.1
+# pip==23.3.1
+
+# install dependencies :
+#  pip install -r ..\pyscripts\requirements.txt --user
+

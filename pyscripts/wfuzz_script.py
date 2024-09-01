@@ -4,8 +4,9 @@ import json
 import re
 
 def run_wfuzz(url, flags):
-    command = ["wfuzz"] + flags + [url]
-    result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    command = ["wsl", "wfuzz"] + flags + [url] # win with wsl 
+    # command = ["wfuzz"] + flags + [url] # mac
+    result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
     return result.stdout, result.stderr
 
 def strip_ansi_codes(text):
