@@ -19,7 +19,13 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-// Function to be injected into the page
+document.getElementById("fuzzBtn").addEventListener('click', function() {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        let activeTab = tabs[0].id;
+        chrome.tabs.sendMessage(activeTab, { action:"fuzz"});
+    });
+})
+
 function highlightRequestGeneratingElements() {
   const elements = document.querySelectorAll('a, form, input[type="submit"], button[type="submit"], button, input[type="button"], input[type="image"]');
 
@@ -56,7 +62,7 @@ function highlightRequestGeneratingElements() {
   });
 }
 
-// Function to be injected into the page
+
 function injectNetworkLogger() {
   const observer = new PerformanceObserver((list) => {
     const entries = list.getEntries();
@@ -88,7 +94,13 @@ function injectNetworkLogger() {
   });
 }
 
-// Listen for messages from the injected script
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if(message.action === "fuzzResponse") {
+    console.log(message)
+    document.getElementById("fuzzLink").innerHTML = message.link;  
+  }
+})
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'xmlhttprequest' && message.status !== 0) {  
     const tableBody = document.querySelector('#requestsTable tbody');
