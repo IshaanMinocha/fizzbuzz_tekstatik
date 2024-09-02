@@ -13,12 +13,22 @@ def get_user_input():
     return input("Enter your message: ")
 
 # Hard-coded prompt
-hard_coded_prompt = "Suggest some ways to get rid of the vulnerabilities."
+hard_coded_prompt = "Suggest some ways to get rid of the vulnerabilities and provide a code solution to fix vulnerability. Please format the response as follows:\n\nSolution:\n[Your solution here]\n\nCode:\n[Your code here]"
 
-def json_format(response_text):
+def clean_text(text):
+    text = text.replace("**", "").strip()
+    return text
+
+def json_format(user_message, clean_text):
+    solution_part = clean_text.split("Solution:")[1].split("Code:")[0].strip()
+    code_part = clean_text.split("Code:")[1].strip()
+
     return {
-        "solution": response_text
+        "user_message": user_message,
+        "solution": solution_part,
+        "code": code_part
     }
+
 
 if __name__ == "__main__":
     user_message = get_user_input()
@@ -37,7 +47,7 @@ if __name__ == "__main__":
             #                       temperature = 0.8)
                                 )
         #print("LLM Response:", response.text)
-        response_json = json_format(response.text)
+        response_json = json_format(user_message, clean_text)
         print(json.dumps(response_json, indent=4))
 
     except Exception as e:
