@@ -3,6 +3,9 @@ import envConfig from './config/dotenv.js';
 import connectDb from './config/db.js';
 import cors from 'cors';
 import userRouter from './routes/UserRoute.js'
+import fuzzedRouter from './routes/FuzzedRoute.js'
+import vulnerabilityRouter from './routes/VulnerabilityRoute.js'
+import resolutionRouter from './routes/ResolutionRoute.js'
 
 envConfig();
 
@@ -16,6 +19,9 @@ server.use(cors({
 server.use(express.json());
 
 server.use('/user', userRouter);
+server.use('/fuzz', fuzzedRouter);
+server.use('/vulnerability', vulnerabilityRouter);
+server.use('/resolution', resolutionRouter);
 
 const startServer = async () => {
     try {
