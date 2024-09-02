@@ -1,28 +1,46 @@
-import pathlib
-import textwrap
+import os
+import json
 import google.generativeai as genai
 from dotenv import load_dotenv
-import os
+
 load_dotenv()
 
 GOOGLE_API_KEY = os.getenv('API_KEY')
 
-# Replace with your API key
-
-# Configure the API key
 genai.configure(api_key=GOOGLE_API_KEY)
 
-# Define a function to format text as Markdown-like output
-def to_markdown(text):
-    text = text.replace('•', '  *')
-    return textwrap.indent(text, '> ', predicate=lambda _: True)
+def get_user_input():
+    return input("Enter your message: ")
 
-# Initialize the GenerativeModel
-model = genai.GenerativeModel('gemini-pro')
+# Hard-coded prompt
+hard_coded_prompt = "Suggest some ways to get rid of the vulnerabilities."
 
-# Generate content based on the prompt
-response = model.generate_content("What is wfuzz software?")
+def json_format(response_text):
+    return {
+        "solution": response_text
+    }
 
-# Format and print the response as Markdown-like text
-formatted_text = to_markdown(response.text)
-print(formatted_text)
+if __name__ == "__main__":
+    user_message = get_user_input()
+    model = genai.GenerativeModel('gemini-pro')
+
+    combined_prompt = f"{user_message}\n\n{hard_coded_prompt}"
+
+    try:
+        response = model.generate_content(
+            f'{combined_prompt}',
+            # generation_config = genai.types.GenerationConfig(
+            #                       candidate_count = 1,
+            #                       stop_sequences = ['.'],
+            #                       top_p = 0.6,
+            #                       top_k = 5,
+            #                       temperature = 0.8)
+                                )
+        #print("LLM Response:", response.text)
+        response_json = json_format(response.text)
+        print(json.dumps(response_json, indent=4))
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+    
