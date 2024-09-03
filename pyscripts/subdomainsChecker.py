@@ -12,7 +12,8 @@ def identify_subdomain_vulnerabilities(json_input):
         'app', 'mobile', 'dashboard', 'reports', 'analytics', 'testing', 'sandbox',
         'news', 'events', 'forum', 'wiki', 'community', 'docs', 'files', 'media',
         'resources', 'server', 'uat', 'devops', 'ops', 'monitoring', 'tools',
-        'notifications', 'api-v1', 'api-v2', 'api-dev', 'api-test', 'api-stage'
+        'notifications', 'api-v1', 'api-v2', 'api-dev', 'api-test', 'api-stage', 'www',
+        'blog', 'test', 'shop', 'images', 'static', 'admin-panel', 'user'
     ]
 
     # Status codes to check
