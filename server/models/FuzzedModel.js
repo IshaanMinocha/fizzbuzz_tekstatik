@@ -20,7 +20,7 @@ const fuzzResultSchema = new mongoose.Schema({
             required: true
         },
         chars: {
-            type: Number,
+            type: Number, 
             required: true
         },
         timeTaken: {
