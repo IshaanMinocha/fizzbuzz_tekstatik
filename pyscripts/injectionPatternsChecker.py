@@ -86,31 +86,7 @@ def identify_vulnerabilities(json_input):
     return vulnerabilities
 
 # Sample JSON input
-json_input = '''
-[
-  {
-    "url": "http://example.com/api/v1/search?q=ls%20-l",
-    "headers": {
-      "X-Forwarded-For": "127.0.0.1"
-    },
-    "cookies": {
-      "session_id": "abc123; Secure; HttpOnly",
-      "user_token": "xyz789"
-    },
-    "response_body": "Some response with potential header injection \\r\\n Host: evil.com"
-  },
-  {
-    "url": "http://example.com/some/path?param=`rm -rf /`",
-    "headers": {
-      "Content-Type": "application/json"
-    },
-    "cookies": {
-      "session_id": "def456"
-    },
-    "response_body": "Response body content"
-  }
-]
-'''
+json_input = input("Enter JSON input: ")
 
 # Identifying vulnerabilities
 vulnerabilities_found = identify_vulnerabilities(json_input)
