@@ -1,16 +1,19 @@
 import json
 import re
 
-def identify_virtual_host_vulnerabilities(json_input):
-    # List of critical paths and files commonly found in virtual hosts
-    virtual_host_paths = [
-        '/', '/index', '/index.php', '/default', '/admin', '/server-status', '/server-info',
-        '/vhost/', '/vhosts/', '/virtual/', '/config/', '/conf/', '/web.config',
-        '/.htaccess', '/.htpasswd', '/admin/config.php', '/.env', '/phpinfo.php',
-        '/wp-config.php', '/db.php', '/localhost/', '/cgi-bin/', '/logs/', '/error/',
-        '/debug/', '/status/', '/backup/', '/old/', '/test/', '/dev/', '/webadmin/',
-        '/cgi-bin/php.cgi', '/cgi-bin/php5.cgi', '/cgi-bin/perl.cgi'
-    ]
+def read_payloads(vhosts):
+    try:
+        with open(vhosts, 'r') as file:
+            # Read each line, strip newline characters, and store it in a list
+            payloads = [line.strip() for line in file.readlines()]
+        return payloads
+    except FileNotFoundError:
+        print(f"File {vhosts} not found.")
+        return []
+
+def vhosts_vulnerabilities(json_input, vhosts):
+    # Read API paths from the specified .txt file
+    api_paths = read_payloads(vhosts)
 
     # Regular expressions for identifying potential vulnerabilities
     sql_injection_patterns = [
@@ -35,153 +38,83 @@ def identify_virtual_host_vulnerabilities(json_input):
 
     # Analyzing each entry in the JSON data
     for entry in data:
-        path = entry.get('path', '')
-        status = entry.get('status')
-        url = entry.get('url', '')
-        headers = entry.get('headers', {})
+        payload = entry.get('payload', '')
+        response = entry.get('response')
+        _id = entry.get('_id', '')
 
-        # Check for exposed virtual host paths
-        if any(vh_path in path for vh_path in virtual_host_paths):
+        if any(vh_path in payload for vh_path in vhosts):
             vulnerabilities.append({
-                'vulnerability': 'Exposed or Misconfigured Virtual Host Path',
+                'vulnerability': 'Exposed or Misconfigured virtual host',
                 'severity': 'High',
-                'location': f'Virtual Host Path: {path}',
-                'url': url
+                'location': f'virtual host: {payload}',
+                'id': _id
             })
 
-        # Check for status code vulnerabilities
-        if status == 200 and any(vh_path in path for vh_path in virtual_host_paths):
+        # Check for response code vulnerabilities
+        if response == '200' and any(vh_path in payload for vh_path in vhosts):
             vulnerabilities.append({
-                'vulnerability': 'Accessible sensitive virtual host path',
+                'vulnerability': 'Sensitive data exposure in virtual host',
                 'severity': 'High',
-                'location': f'Accessible Virtual Host Path: {path}',
-                'url': url
+                'location': f'Accessible virtual host {payload}',
+                'id': _id
             })
-        elif status == 403 and any(vh_path in path for vh_path in virtual_host_paths):
+        elif response == '403' and any(vh_path in payload for vh_path in vhosts):
             vulnerabilities.append({
-                'vulnerability': 'Restricted virtual host path - potential misconfiguration',
+                'vulnerability': 'Restricted virtual host - potential misconfiguration',
                 'severity': 'Medium',
-                'location': f'Restricted Virtual Host Path: {path}',
-                'url': url
+                'location': f'Restricted virtual host: {payload}',
+                'id': _id
             })
-        elif status == 500:
+        elif response == '500':
             vulnerabilities.append({
-                'vulnerability': 'Server Misconfiguration or Error in Virtual Host',
+                'vulnerability': 'Server Misconfiguration or Error in virtual host',
                 'severity': 'Medium',
-                'location': f'Path causing server error: {path}',
-                'url': url
+                'location': f'Path causing server error: {payload}',
+                'id': _id
             })
 
-        # Check for Server Information Exposure
-        if 'server' in headers:
-            vulnerabilities.append({
-                'vulnerability': 'Server Information Exposure',
-                'severity': 'Low',
-                'location': f'Server Header: {headers["server"]}',
-                'url': url
-            })
-
-        # Check for SQL Injection vulnerabilities
+        # Check for potential SQL Injection vulnerabilities
         for pattern in sql_injection_patterns:
-            if re.search(pattern, path, re.IGNORECASE):
+            if re.search(pattern, payload, re.IGNORECASE):
                 vulnerabilities.append({
                     'vulnerability': 'Potential SQL Injection',
                     'severity': 'High',
-                    'location': f'Path: {path}',
-                    'url': url
+                    'location': f'Path: {payload}',
+                    'id': _id
                 })
                 break
 
-        # Check for XSS vulnerabilities
+        # Check for potential XSS vulnerabilities
         for pattern in xss_patterns:
-            if re.search(pattern, path, re.IGNORECASE):
+            if re.search(pattern, payload, re.IGNORECASE):
                 vulnerabilities.append({
                     'vulnerability': 'Potential Cross-Site Scripting (XSS)',
                     'severity': 'High',
-                    'location': f'Path: {path}',
-                    'url': url
+                    'location': f'Path: {payload}',
+                    'id': _id
                 })
                 break
 
         # Check for potential directory traversal
-        if '..' in path:
+        if '..' in payload:
             vulnerabilities.append({
-                'vulnerability': 'Potential Directory Traversal',
+                'vulnerability': 'Potential virtual host Traversal',
                 'severity': 'High',
-                'location': f'Path: {path}',
-                'url': url
+                'location': f'Path: {payload}',
+                'id': _id
             })
 
     return vulnerabilities
 
-# Sample JSON input
-json_input = '''
-[
-  {
-    "path": "/vhost/admin/config.php",
-    "status": 200,
-    "size": 54321,
-    "words": 234,
-    "lines": 12,
-    "duration": "0.234s",
-    "url": "http://example.com/vhost/admin/config.php",
-    "headers": {
-      "server": "Apache/2.4.41 (Ubuntu)"
-    }
-  },
-  {
-    "path": "/server-status",
-    "status": 403,
-    "size": 67890,
-    "words": 456,
-    "lines": 20,
-    "duration": "0.456s",
-    "url": "http://example.com/server-status",
-    "headers": {
-      "server": "nginx/1.18.0"
-    }
-  },
-  {
-    "path": "/cgi-bin/php.cgi",
-    "status": 200,
-    "size": 5678,
-    "words": 123,
-    "lines": 5,
-    "duration": "0.234s",
-    "url": "http://example.com/cgi-bin/php.cgi",
-    "headers": {
-      "server": "Apache"
-    }
-  },
-  {
-    "path": "/.htaccess",
-    "status": 403,
-    "size": 1234,
-    "words": 10,
-    "lines": 2,
-    "duration": "0.345s",
-    "url": "http://example.com/.htaccess",
-    "headers": {
-      "server": "nginx"
-    }
-  },
-  {
-    "path": "/../../etc/passwd",
-    "status": 403,
-    "size": 1234,
-    "words": 10,
-    "lines": 2,
-    "duration": "0.345s",
-    "url": "http://example.com/../../etc/passwd",
-    "headers": {
-      "server": "Apache/2.4.41"
-    }
-  }
-]
-'''
+
+# Get JSON input from the user
+json_input = input("Enter the JSON input:")
+
+# Specify the path to the .txt file containing virtual hosts paths
+vhosts = 'vhosts.txt'  # Replace with your actual file path
 
 # Identifying vulnerabilities
-vulnerabilities_found = identify_virtual_host_vulnerabilities(json_input)
+vulnerabilities_found = vhosts_vulnerabilities(json_input, vhosts)
 
 # Convert vulnerabilities to JSON format
 vulnerabilities_json = json.dumps(vulnerabilities_found, indent=2)
