@@ -12,7 +12,7 @@ def read_payloads(vhosts):
         return []
 
 def vhosts_vulnerabilities(json_input, vhosts):
-    # Read API paths from the specified .txt file
+    # Read vhost paths from the specified .txt file
     vhosts = read_payloads(vhosts)
 
     # Regular expressions for identifying potential vulnerabilities
