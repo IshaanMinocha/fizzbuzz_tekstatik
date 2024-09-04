@@ -59,40 +59,7 @@ def identify_subdomain_vulnerabilities(json_input):
     return vulnerabilities
 
 # Sample JSON input
-json_input = '''
-[
-  {
-    "subdomain": "admin.example.com",
-    "response": 200,
-    "url": "http://admin.example.com"
-  },
-  {
-    "subdomain": "test.example.com",
-    "response": 403,
-    "url": "http://test.example.com"
-  },
-  {
-    "subdomain": "ftp.example.com",
-    "response": 404,
-    "url": "http://ftp.example.com"
-  },
-  {
-    "subdomain": "old.example.com",
-    "response": 500,
-    "url": "http://old.example.com"
-  },
-  {
-    "subdomain": "api.example.com",
-    "response": 200,
-    "url": "http://api.example.com"
-  },
-  {
-    "subdomain": "support.example.com",
-    "response": 403,
-    "url": "http://support.example.com"
-  }
-]
-'''
+json_input = input("Enter JSON input: ")
 
 # Identifying vulnerabilities
 vulnerabilities_found = identify_subdomain_vulnerabilities(json_input)
