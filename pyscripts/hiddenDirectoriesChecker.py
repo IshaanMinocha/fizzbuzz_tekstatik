@@ -13,7 +13,7 @@ def read_payloads(hidden_directories):
 
 def identify_hidden_directory_vulnerabilities(json_input, hidden_directories):
     # Read API paths from the specified .txt file
-    api_paths = read_payloads(hidden_directories)
+    hidden_directories = read_payloads(hidden_directories)
 
     # Regular expressions for identifying potential vulnerabilities
     sql_injection_patterns = [
@@ -110,7 +110,7 @@ def identify_hidden_directory_vulnerabilities(json_input, hidden_directories):
 # Get JSON input from the user
 json_input = input("Enter the JSON input:")
 
-# Specify the path to the .txt file containing API paths
+# Specify the path to the .txt file containing dir paths
 hidden_directories = 'Directories_All.wordlist.txt'  # Replace with your actual file path
 
 # Identifying vulnerabilities
