@@ -1,13 +1,33 @@
 import json
 import re
 
-def identify_api_vulnerabilities(json_input):
-    # List of common API paths that are often vulnerable
-    api_paths = ['/api/v1/', '/api/v1/users', '/api/v1/admin', '/api/v1/login', '/api/v1/logout', '/api/v1/register', '/api/v1/reset-password', '/api/v1/verify',
-                 '/api/v1/profile', '/api/v1/data', '/api/v1/transactions', '/api/v1/settings', '/api/v1/upload', '/api/v1/download', '/api/v1/report',
-                 '/api/v1/admin/settings', '/api/v1/admin/users', '/api/v1/admin/logs', '/api/v1/admin/backup', '/api/v1/admin/database', '/api/v1/admin/reset',
-                 '/api/v1/admin/permissions', '/api/v1/products', '/api/v1/orders', '/api/v1/register', '/api/v2/products', '/api/v2/orders', '/api/v2/login',
-                 '/api/v2/register', '/api/v2/logout','/admin', '/dashboard', '/settings', '/profile', '/search', '/notifications']
+def read_payloads(file_path):
+    """
+    Reads payloads (API paths) from a .txt file specified by file_path.
+    
+    :param file_path: Path to the .txt file containing API paths.
+    :return: A list of API paths.
+    """
+    try:
+        with open(file_path, 'r') as file:
+            # Read each line, strip newline characters, and store it in a list
+            payloads = [line.strip() for line in file.readlines()]
+        return payloads
+    except FileNotFoundError:
+        print(f"File {file_path} not found.")
+        return []
+
+def identify_api_vulnerabilities(json_input, api_path_file):
+    """
+    Identifies vulnerabilities in API endpoints based on predefined API paths
+    and other patterns, using the API paths read from a .txt file.
+    
+    :param json_input: JSON input containing API details.
+    :param api_path_file: Path to the .txt file containing API paths.
+    :return: A list of detected vulnerabilities.
+    """
+    # Read API paths from the specified .txt file
+    api_paths = read_payloads(api_path_file)
 
     # Regular expressions for identifying potential vulnerabilities
     sql_injection_patterns = [
@@ -114,8 +134,11 @@ def identify_api_vulnerabilities(json_input):
 # Get JSON input from the user
 json_input = input("Enter the JSON input:")
 
+# Specify the path to the .txt file containing API paths
+api_path_file = 'api_payloads.txt'  # Replace with your actual file path
+
 # Identifying vulnerabilities
-vulnerabilities_found = identify_api_vulnerabilities(json_input)
+vulnerabilities_found = identify_api_vulnerabilities(json_input, api_path_file)
 
 # Convert vulnerabilities to JSON format
 vulnerabilities_json = json.dumps(vulnerabilities_found, indent=2)
