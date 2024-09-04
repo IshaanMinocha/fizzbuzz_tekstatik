@@ -1,36 +1,50 @@
-
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { SiGithub } from "react-icons/si";
-
 import { motion } from "framer-motion";
 import { twMerge } from "tailwind-merge";
 
 const SignIn = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("http://localhost:5000/user/login", { email, password });
+      if (response.data.success) {
+  
+        localStorage.setItem("authToken", response.data.token);
+        navigate("/dashboard/vulnerability");
+      } else {
+        setError(response.data.message);
+      }
+    } catch (err) {
+      setError("An error occurred. Please try again.");
+    }
+  };
+
   return (
     <div className="bg-zinc-950 py-20 text-zinc-200 selection:bg-zinc-600 pt-28">
-      
-
       <motion.div
-        initial={{
-          opacity: 0,
-          y: 25,
-        }}
-        animate={{
-          opacity: 1,
-          y: 0,
-        }}
-        transition={{
-          duration: 1.25,
-          ease: "easeInOut",
-        }}
+        initial={{ opacity: 0, y: 25 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1.25, ease: "easeInOut" }}
         className="relative z-10 mx-auto w-full max-w-xl p-4"
       >
         <Heading />
-
-     
-        <Email />
-    
+        {error && <p className="text-red-500">{error}</p>}
+        <Email
+          email={email}
+          password={password}
+          setEmail={setEmail}
+          setPassword={setPassword}
+          handleSignIn={handleSignIn}
+        />
       </motion.div>
-
       <CornerGrid />
     </div>
   );
@@ -38,7 +52,6 @@ const SignIn = () => {
 
 const Heading = () => (
   <div>
-
     <div className="mb-9 mt-6 space-y-1.5">
       <h1 className="text-2xl font-semibold">Sign in to your account</h1>
       <p className="text-zinc-400">
@@ -51,11 +64,9 @@ const Heading = () => (
   </div>
 );
 
-
-
-const Email = () => {
+const Email = ({ email, password, setEmail, setPassword, handleSignIn }) => {
   return (
-    <form onSubmit={(e) => e.preventDefault()}>
+    <form onSubmit={handleSignIn}>
       <div className="mb-3">
         <label htmlFor="email-input" className="mb-1.5 block text-zinc-400">
           Email
@@ -63,6 +74,8 @@ const Email = () => {
         <input
           id="email-input"
           type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           placeholder="your.email@provider.com"
           className="w-full rounded-md border border-zinc-700 bg-zinc-900 px-3 py-2 placeholder-zinc-500 ring-1 ring-transparent transition-shadow focus:outline-0 focus:ring-blue-700"
         />
@@ -72,11 +85,12 @@ const Email = () => {
           <label htmlFor="password-input" className="block text-zinc-400">
             Password
           </label>
-         
         </div>
         <input
           id="password-input"
           type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           placeholder="••••••••••••"
           className="w-full rounded-md border border-zinc-700 bg-zinc-900 px-3 py-2 placeholder-zinc-500 ring-1 ring-transparent transition-shadow focus:outline-0 focus:ring-blue-700"
         />
@@ -88,42 +102,11 @@ const Email = () => {
   );
 };
 
-
-
 const SplashButton = ({ children, className, ...rest }) => {
   return (
     <button
       className={twMerge(
-        "rounded-md bg-gradient-to-br from-indigo-600 from-40% to-indigo-400 px-4 py-2 text-lg text-zinc-50 ring-2ring-offset-2 ring-offset-zinc-950 transition-all hover:scale-[1.02] hover:ring-transparent active:scale-[0.98] ",
-        className
-      )}
-      {...rest}
-    >
-      {children}
-    </button>
-  );
-};
-
-const BubbleButton = ({ children, className, ...rest }) => {
-  return (
-    <button
-      className={twMerge(
-        `
-        relative z-0 flex items-center gap-2 overflow-hidden whitespace-nowrap rounded-md 
-        border border-zinc-700 bg-gradient-to-br from-zinc-800 to-zinc-950
-        px-3 py-1.5
-        text-zinc-50 transition-all duration-300
-        
-        before:absolute before:inset-0
-        before:-z-10 before:translate-y-[200%]
-        before:scale-[2.5]
-        before:rounded-[100%] before:bg-zinc-100
-        before:transition-transform before:duration-500
-        before:content-[""]
-
-        hover:scale-105 hover:text-zinc-900
-        hover:before:translate-y-[0%]
-        active:scale-100`,
+        "rounded-md bg-gradient-to-br from-indigo-600 from-40% to-indigo-400 px-4 py-2 text-lg text-zinc-50 ring-2 ring-offset-2 ring-offset-zinc-950 transition-all hover:scale-[1.02] hover:ring-transparent active:scale-[0.98]",
         className
       )}
       {...rest}
@@ -151,7 +134,5 @@ const CornerGrid = () => {
     </div>
   );
 };
-
-
 
 export default SignIn;

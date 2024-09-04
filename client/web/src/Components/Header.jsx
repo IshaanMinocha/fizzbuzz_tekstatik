@@ -1,24 +1,26 @@
 import { useEffect, useRef, useState } from "react";
 import { useAnimate, motion } from "framer-motion";
-import { FiMenu, FiArrowUpRight } from "react-icons/fi";
+import { FiMenu, FiArrowUpRight, FiLogOut } from "react-icons/fi";
 import useMeasure from "react-use-measure";
-
 
 const Header = () => {
   return (
-  
-      <GlassNavigation />
-
-    
+    <GlassNavigation />
   );
 };
 
 const GlassNavigation = () => {
   const [hovered, setHovered] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const [scope, animate] = useAnimate();
   const navRef = useRef(null);
+
+  useEffect(() => {
+    const authToken = localStorage.getItem('authToken');
+    setIsLoggedIn(!!authToken);
+  }, []);
 
   const handleMouseMove = ({ offsetX, offsetY, target }) => {
     // @ts-ignore
@@ -55,14 +57,14 @@ const GlassNavigation = () => {
       <div className="glass-nav flex items-center justify-between px-5 py-5">
         <Cursor hovered={hovered} scope={scope} />
 
-        <Links />
+        <Links isLoggedIn={isLoggedIn} />
 
         <Logo />
 
-        <Buttons setMenuOpen={setMenuOpen} />
+        <Buttons setMenuOpen={setMenuOpen} isLoggedIn={isLoggedIn} />
       </div>
 
-      <MobileMenu menuOpen={menuOpen} />
+      <MobileMenu menuOpen={menuOpen} isLoggedIn={isLoggedIn} />
     </nav>
   );
 };
@@ -92,20 +94,31 @@ const Logo = () => (
   </span>
 );
 
-const Links = () => (
-  <div className="hidden items-center gap-2 md:flex">
-    <GlassLink text="Home" href={"/"} />
-    <GlassLink text="DashBoard" href={"/dashboard/vulnerability"}/>
+const Links = ({ isLoggedIn }) => {
+  const handleDashboardClick = (e) => {
+    if (!isLoggedIn) {
+      e.preventDefault();
+      window.location.href = '/signin';
+    }
+  };
 
-  </div>
-);
-
-const GlassLink = ({ text, href }) => {
   return (
-    
+    <div className="hidden items-center gap-2 md:flex">
+      <GlassLink text="Home" href={"/"} />
+      <GlassLink 
+        text="DashBoard" 
+        href={"/dashboard/vulnerability"} 
+        onClick={handleDashboardClick}
+      />
+    </div>
+  );
+};
 
+const GlassLink = ({ text, href, onClick }) => {
+  return (
     <a
       href={href}
+      onClick={onClick}
       className="group relative scale-100 overflow-hidden rounded-lg px-4 py-2 transition-transform hover:scale-105 active:scale-95"
     >
       <span className="relative z-10 text-white/90 transition-colors group-hover:text-white">
@@ -116,26 +129,34 @@ const GlassLink = ({ text, href }) => {
   );
 };
 
-const TextLink = ({ text, href }) => {
+const TextLink = ({ text, href, onClick }) => {
   return (
-    <a href={href} className="text-white/90 transition-colors hover:text-white">
+    <a href={href} onClick={onClick} className="text-white/90 transition-colors hover:text-white">
       {text}
     </a>
   );
 };
 
-const Buttons = ({ setMenuOpen }) => (
+const Buttons = ({ setMenuOpen, isLoggedIn }) => (
   <div className="flex items-center gap-4">
-    <div className="hidden md:block">
-      <SignInButton />
-    </div>
-    <a href="/signup">
-
-    <button className="relative scale-100 overflow-hidden rounded-lg bg-gradient-to-br from-indigo-600 from-40% to-indigo-400 px-4 py-2 font-medium text-white transition-transform hover:scale-105 active:scale-95 flex justify-center place-items-center gap-2">
-       Sign Up
-    </button>
-    </a>
-
+    {!isLoggedIn && (
+      <>
+        <div className="hidden md:block">
+          <SignInButton />
+        </div>
+        <a href="/signup">
+          <button className="relative scale-100 overflow-hidden rounded-lg bg-gradient-to-br from-indigo-600 from-40% to-indigo-400 px-4 py-2 font-medium text-white transition-transform hover:scale-105 active:scale-95 flex justify-center place-items-center gap-2">
+            Sign Up
+          </button>
+        </a>
+      </>
+    )}
+    {isLoggedIn && (
+      <>
+        <WelcomeMessage />
+        <LogoutButton />
+      </>
+    )}
     <button
       onClick={() => setMenuOpen((pv) => !pv)}
       className="ml-2 block scale-100 text-3xl text-white/90 transition-all hover:scale-105 hover:text-white active:scale-95 md:hidden"
@@ -148,18 +169,51 @@ const Buttons = ({ setMenuOpen }) => (
 const SignInButton = () => {
   return (
     <a href="/signin">
-    <button className="group relative scale-100 overflow-hidden rounded-lg px-4 py-2 transition-transform hover:scale-105 active:scale-95">
-      <span className="relative z-10 text-white/90 transition-colors group-hover:text-white">
-        Sign in
-      </span>
-      <span className="absolute inset-0 z-0 bg-gradient-to-br from-white/20 to-white/5 opacity-0 transition-opacity group-hover:opacity-100" />
-    </button>
+      <button className="group relative scale-100 overflow-hidden rounded-lg px-4 py-2 transition-transform hover:scale-105 active:scale-95">
+        <span className="relative z-10 text-white/90 transition-colors group-hover:text-white">
+          Sign in
+        </span>
+        <span className="absolute inset-0 z-0 bg-gradient-to-br from-white/20 to-white/5 opacity-0 transition-opacity group-hover:opacity-100" />
+      </button>
     </a>
   );
 };
 
-const MobileMenu = ({ menuOpen }) => {
+const WelcomeMessage = () => (
+  <span className="text-white/90">Welcome Back!</span>
+);
+
+const LogoutButton = () => {
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+  
+    window.location.href = '/';
+  };
+
+  return (
+    <button
+      onClick={handleLogout}
+      className="group relative scale-100 overflow-hidden rounded-lg px-4 py-2 transition-transform hover:scale-105 active:scale-95 flex items-center gap-2"
+    >
+      <span className="relative z-10 text-white/90 transition-colors group-hover:text-white">
+        Logout
+      </span>
+      <FiLogOut className="text-white/90 group-hover:text-white" />
+      <span className="absolute inset-0 z-0 bg-gradient-to-br from-white/20 to-white/5 opacity-0 transition-opacity group-hover:opacity-100" />
+    </button>
+  );
+};
+
+const MobileMenu = ({ menuOpen, isLoggedIn }) => {
   const [ref, { height }] = useMeasure();
+
+  const handleDashboardClick = (e) => {
+    if (!isLoggedIn) {
+      e.preventDefault();
+      window.location.href = '/signin';
+    }
+  };
+
   return (
     <motion.div
       initial={false}
@@ -170,10 +224,16 @@ const MobileMenu = ({ menuOpen }) => {
     >
       <div ref={ref} className="flex items-center justify-between px-4 pb-4">
         <div className="flex items-center gap-4">
-          <TextLink text="Home" href={"/"}/>
-          <TextLink text="DashBoard" href={"/dashboard"}/>
+          <TextLink text="Home" href={"/"} />
+          <TextLink text="DashBoard" href={"/dashboard"} onClick={handleDashboardClick} />
         </div>
-        <SignInButton />
+        {!isLoggedIn && <SignInButton />}
+        {isLoggedIn && (
+          <>
+            <WelcomeMessage />
+            <LogoutButton />
+          </>
+        )}
       </div>
     </motion.div>
   );

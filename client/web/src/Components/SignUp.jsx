@@ -1,14 +1,12 @@
-
-
-
 import { motion } from "framer-motion";
 import { twMerge } from "tailwind-merge";
+import axios from "axios"; 
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   return (
     <div className="bg-zinc-950 py-20 text-zinc-200 selection:bg-zinc-600 pt-28">
-      
-
       <motion.div
         initial={{
           opacity: 0,
@@ -25,10 +23,7 @@ const SignUp = () => {
         className="relative z-10 mx-auto w-full max-w-xl p-4"
       >
         <Heading />
-
-
         <Email />
-      
       </motion.div>
 
       <CornerGrid />
@@ -38,23 +33,47 @@ const SignUp = () => {
 
 const Heading = () => (
   <div>
-
     <div className="mb-9 mt-6 space-y-1.5">
       <h1 className="text-2xl font-semibold">Register your account</h1>
       <p className="text-zinc-400">
         Already have an account?{" "}
         <a href="/signin" className="text-blue-400">
-          Login 
+          Login
         </a>
       </p>
     </div>
   </div>
 );
 
-
 const Email = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate(); 
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("http://localhost:5000/user/register", {
+        name,
+        email,
+        password,
+      });
+
+      if (response.data.success) {
+      
+        navigate("/signin"); 
+      } else {
+        alert(response.data.message);
+      }
+    } catch (error) {
+      alert("An error occurred during registration. Please try again.");
+      console.error(error);
+    }
+  };
+
   return (
-    <form onSubmit={(e) => e.preventDefault()}>
+    <form onSubmit={handleSubmit}>
       <div className="mb-3">
         <label htmlFor="name-input" className="mb-1.5 block text-zinc-400">
           Name
@@ -64,6 +83,8 @@ const Email = () => {
           type="text"
           placeholder="John Doe"
           className="w-full rounded-md border border-zinc-700 bg-zinc-900 px-3 py-2 placeholder-zinc-500 ring-1 ring-transparent transition-shadow focus:outline-0 focus:ring-blue-700"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
         />
       </div>
       <div className="mb-3">
@@ -75,6 +96,8 @@ const Email = () => {
           type="email"
           placeholder="your.email@provider.com"
           className="w-full rounded-md border border-zinc-700 bg-zinc-900 px-3 py-2 placeholder-zinc-500 ring-1 ring-transparent transition-shadow focus:outline-0 focus:ring-blue-700"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
       </div>
       <div className="mb-6">
@@ -82,58 +105,28 @@ const Email = () => {
           <label htmlFor="password-input" className="block text-zinc-400">
             Password
           </label>
-         
         </div>
         <input
           id="password-input"
           type="password"
           placeholder="••••••••••••"
           className="w-full rounded-md border border-zinc-700 bg-zinc-900 px-3 py-2 placeholder-zinc-500 ring-1 ring-transparent transition-shadow focus:outline-0 focus:ring-blue-700"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
       </div>
       <SplashButton type="submit" className="w-full">
-        Sign in
+        Sign Up
       </SplashButton>
     </form>
   );
 };
 
-
-
 const SplashButton = ({ children, className, ...rest }) => {
   return (
     <button
       className={twMerge(
-        "rounded-md bg-gradient-to-br from-indigo-600 from-40% to-indigo-400 px-4 py-2 text-lg text-zinc-50 ring-2ring-offset-2 ring-offset-zinc-950 transition-all hover:scale-[1.02] hover:ring-transparent active:scale-[0.98] ",
-        className
-      )}
-      {...rest}
-    >
-      {children}
-    </button>
-  );
-};
-
-const BubbleButton = ({ children, className, ...rest }) => {
-  return (
-    <button
-      className={twMerge(
-        `
-        relative z-0 flex items-center gap-2 overflow-hidden whitespace-nowrap rounded-md 
-        border border-zinc-700 bg-gradient-to-br from-zinc-800 to-zinc-950
-        px-3 py-1.5
-        text-zinc-50 transition-all duration-300
-        
-        before:absolute before:inset-0
-        before:-z-10 before:translate-y-[200%]
-        before:scale-[2.5]
-        before:rounded-[100%] before:bg-zinc-100
-        before:transition-transform before:duration-500
-        before:content-[""]
-
-        hover:scale-105 hover:text-zinc-900
-        hover:before:translate-y-[0%]
-        active:scale-100`,
+        "rounded-md bg-gradient-to-br from-indigo-600 from-40% to-indigo-400 px-4 py-2 text-lg text-zinc-50 ring-2 ring-offset-2 ring-offset-zinc-950 transition-all hover:scale-[1.02] hover:ring-transparent active:scale-[0.98]",
         className
       )}
       {...rest}
@@ -161,7 +154,5 @@ const CornerGrid = () => {
     </div>
   );
 };
-
-
 
 export default SignUp;
