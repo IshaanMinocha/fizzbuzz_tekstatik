@@ -2,13 +2,13 @@ import argparse
 import json
 
 # Import functions from each of the existing scripts
-from apiEndpointChecker import identify_api_vulnerabilities
-from hiddenDirectoriesChecker import identify_hidden_directory_vulnerabilities
-from injectionPatternsChecker import identify_vulnerabilities
-from subdomainsChecker import identify_subdomain_vulnerabilities
-from urlParaChecker import identify_url_parameter_vulnerabilities
-from virtualHostsChecker import identify_virtual_host_vulnerabilities
-from vulnerabilityChecker import check_vulnerabilities
+from checkers.apiEndpointsChecker import identify_api_vulnerabilities
+from checkers.hiddenDirectoriesChecker import identify_hidden_directory_vulnerabilities
+from checkers.injectionPatternsChecker import identify_vulnerabilities
+from checkers.subdomainsChecker import identify_subdomain_vulnerabilities
+from checkers.urlParaChecker import identify_url_parameter_vulnerabilities
+from checkers.virtualHostsChecker import identify_virtual_host_vulnerabilities
+from checkers.vulnerabilityChecker import check_vulnerabilities
 
 def main():
     parser = argparse.ArgumentParser(description="Run various security checks.")

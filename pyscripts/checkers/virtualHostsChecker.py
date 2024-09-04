@@ -111,7 +111,7 @@ def vhosts_vulnerabilities(json_input, vhosts):
 json_input = input("Enter the JSON input:")
 
 # Specify the path to the .txt file containing virtual hosts paths
-vhosts = 'vhosts.txt'  # Replace with your actual file path
+vhosts = '../../payloads/vhosts.txt'  # Replace with your actual file path
 
 # Identifying vulnerabilities
 vulnerabilities_found = vhosts_vulnerabilities(json_input, vhosts)

@@ -12,8 +12,8 @@ def read_patterns(file_path):
 
 def identify_url_parameter_vulnerabilities(json_input):
     # File paths to the patterns files
-    sql_patterns_file = 'sql_injection_patterns.txt'
-    xss_patterns_file = 'xss_patterns.txt'
+    sql_patterns_file = '../../payloads/sql_injection_patterns.txt'
+    xss_patterns_file = '../../payloads/xss_patterns.txt'
 
     # Read patterns from files
     sql_injection_patterns = read_patterns(sql_patterns_file)

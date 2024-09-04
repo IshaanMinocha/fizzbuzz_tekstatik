@@ -126,7 +126,7 @@ def identify_api_vulnerabilities(json_input, api_path_file):
 json_input = input("Enter the JSON input:")
 
 # Specify the path to the .txt file containing API paths
-api_path_file = 'api_payloads.txt'  # Replace with your actual file path
+api_path_file = '../../payloads/api_payloads.txt'  # Replace with your actual file path
 
 # Identifying vulnerabilities
 vulnerabilities_found = identify_api_vulnerabilities(json_input, api_path_file)

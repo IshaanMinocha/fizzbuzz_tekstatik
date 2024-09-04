@@ -111,7 +111,7 @@ def identify_hidden_directory_vulnerabilities(json_input, hidden_directories):
 json_input = input("Enter the JSON input:")
 
 # Specify the path to the .txt file containing dir paths
-hidden_directories = 'Directories_All.wordlist.txt'  # Replace with your actual file path
+hidden_directories = '../../payloads/Directories_All.wordlist.txt'  # Replace with your actual file path
 
 # Identifying vulnerabilities
 vulnerabilities_found = identify_hidden_directory_vulnerabilities(json_input, hidden_directories)
