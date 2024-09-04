@@ -39,7 +39,7 @@ def identify_vulnerabilities(json_input):
         headers = entry.get('headers', {})
         cookies = entry.get('cookies', {})
         response_body = entry.get('response_body', '')
-
+        _id = entry.get('_id', '')
         # Header Manipulation Checks
         for pattern in header_injection_patterns:
             if re.search(pattern, response_body, re.IGNORECASE):
@@ -47,7 +47,8 @@ def identify_vulnerabilities(json_input):
                     'vulnerability': 'Potential Header Injection',
                     'severity': 'High',
                     'location': f'URL: {url}',
-                    'details': f'Matched Pattern: {pattern}'
+                    'details': f'Matched Pattern: {pattern}',
+                    'id': _id
                 })
 
         # Shell Injection Checks
@@ -57,7 +58,8 @@ def identify_vulnerabilities(json_input):
                     'vulnerability': 'Potential Shell Injection',
                     'severity': 'High',
                     'location': f'URL: {url}',
-                    'details': f'Matched Pattern: {pattern}'
+                    'details': f'Matched Pattern: {pattern}',
+                    'id': _id
                 })
 
         # Session and Cookie Analysis
@@ -68,7 +70,8 @@ def identify_vulnerabilities(json_input):
                         'vulnerability': f'Cookie Security Flag Missing: {flag}',
                         'severity': 'High',
                         'location': f'Cookie: {cookie_name}',
-                        'details': description
+                        'details': description,
+                        'id': _id
                     })
 
         # AJAX Injection Checks
@@ -76,7 +79,8 @@ def identify_vulnerabilities(json_input):
             'vulnerability': ajax_injection_placeholder,
             'severity': 'Info',
             'location': f'URL: {url}',
-            'details': 'Client-side analysis required for AJAX injections.'
+            'details': 'Client-side analysis required for AJAX injections.',
+            'id': _id
         })
 
     return vulnerabilities
