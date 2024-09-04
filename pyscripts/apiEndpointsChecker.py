@@ -1,13 +1,33 @@
 import json
 import re
 
-def identify_api_vulnerabilities(json_input):
-    # List of common API paths that are often vulnerable
-    api_paths = ['/api/v1/', '/api/v1/users', '/api/v1/admin', '/api/v1/login', '/api/v1/logout', '/api/v1/register', '/api/v1/reset-password', '/api/v1/verify',
-                 '/api/v1/profile', '/api/v1/data', '/api/v1/transactions', '/api/v1/settings', '/api/v1/upload', '/api/v1/download', '/api/v1/report',
-                 '/api/v1/admin/settings', '/api/v1/admin/users', '/api/v1/admin/logs', '/api/v1/admin/backup', '/api/v1/admin/database', '/api/v1/admin/reset',
-                 '/api/v1/admin/permissions', '/api/v1/products', '/api/v1/orders', '/api/v1/register', '/api/v2/products', '/api/v2/orders', '/api/v2/login',
-                 '/api/v2/register', '/api/v2/logout','/admin', '/dashboard', '/settings', '/profile', '/search', '/notifications']
+def read_payloads(file_path):
+    """
+    Reads payloads (API paths) from a .txt file specified by file_path.
+    
+    :param file_path: Path to the .txt file containing API paths.
+    :return: A list of API paths.
+    """
+    try:
+        with open(file_path, 'r') as file:
+            # Read each line, strip newline characters, and store it in a list
+            payloads = [line.strip() for line in file.readlines()]
+        return payloads
+    except FileNotFoundError:
+        print(f"File {file_path} not found.")
+        return []
+
+def identify_api_vulnerabilities(json_input, api_path_file):
+    """
+    Identifies vulnerabilities in API endpoints based on predefined API paths
+    and other patterns, using the API paths read from a .txt file.
+    
+    :param json_input: JSON input containing API details.
+    :param api_path_file: Path to the .txt file containing API paths.
+    :return: A list of detected vulnerabilities.
+    """
+    # Read API paths from the specified .txt file
+    api_paths = read_payloads(api_path_file)
 
     # Regular expressions for identifying potential vulnerabilities
     sql_injection_patterns = [
@@ -32,90 +52,84 @@ def identify_api_vulnerabilities(json_input):
 
     # Analyzing each entry in the JSON data
     for entry in data:
-        path = entry.get('path', '')
-        status = entry.get('status')
-        url = entry.get('url', '')
-        headers = entry.get('headers', {})
+        payload = entry.get('payload', '')
+        response = entry.get('response')
+        _id = entry.get('_id', '')
 
         # Check for exposed API paths
-        if any(api_path in path for api_path in api_paths):
+        if any(api_path in payload for api_path in api_paths):
             vulnerabilities.append({
                 'vulnerability': 'Exposed or Misconfigured API Endpoint',
                 'severity': 'High',
-                'location': f'API Endpoint: {path}',
-                'url': url
+                'location': f'API Endpoint: {payload}',
+                'id': _id
             })
 
-        # Check for status code vulnerabilities
-        if status == 200 and any(api_path in path for api_path in api_paths):
+        # Check for response code vulnerabilities
+        if response == '200' and any(api_path in payload for api_path in api_paths):
             vulnerabilities.append({
                 'vulnerability': 'Sensitive data exposure in API endpoint',
                 'severity': 'High',
-                'location': f'Accessible API Endpoint: {path}',
-                'url': url
+                'location': f'Accessible API Endpoint: {payload}',
+                'id': _id
             })
-        elif status == 403 and any(api_path in path for api_path in api_paths):
+        elif response == '403' and any(api_path in payload for api_path in api_paths):
             vulnerabilities.append({
                 'vulnerability': 'Restricted API endpoint - potential misconfiguration',
                 'severity': 'Medium',
-                'location': f'Restricted API Endpoint: {path}',
-                'url': url
+                'location': f'Restricted API Endpoint: {payload}',
+                'id': _id
             })
-        elif status == 500:
+        elif response == '500':
             vulnerabilities.append({
                 'vulnerability': 'Server Misconfiguration or Error in API Endpoint',
                 'severity': 'Medium',
-                'location': f'Path causing server error: {path}',
-                'url': url
+                'location': f'Path causing server error: {payload}',
+                'id': _id
             })
 
-        # Check for Server Information Exposure
-        if 'server' in headers:
-            vulnerabilities.append({
-                'vulnerability': 'Server Information Exposure',
-                'severity': 'Low',
-                'location': f'Server Header: {headers["server"]}',
-                'url': url
-            })
-
-        # Check for SQL Injection vulnerabilities
+        # Check for potential SQL Injection vulnerabilities
         for pattern in sql_injection_patterns:
-            if re.search(pattern, path, re.IGNORECASE):
+            if re.search(pattern, payload, re.IGNORECASE):
                 vulnerabilities.append({
                     'vulnerability': 'Potential SQL Injection',
                     'severity': 'High',
-                    'location': f'Path: {path}',
-                    'url': url
+                    'location': f'Path: {payload}',
+                    'id': _id
                 })
                 break
 
-        # Check for XSS vulnerabilities
+        # Check for potential XSS vulnerabilities
         for pattern in xss_patterns:
-            if re.search(pattern, path, re.IGNORECASE):
+            if re.search(pattern, payload, re.IGNORECASE):
                 vulnerabilities.append({
                     'vulnerability': 'Potential Cross-Site Scripting (XSS)',
                     'severity': 'High',
-                    'location': f'Path: {path}',
-                    'url': url
+                    'location': f'Path: {payload}',
+                    'id': _id
                 })
                 break
 
         # Check for potential directory traversal
-        if '..' in path:
+        if '..' in payload:
             vulnerabilities.append({
                 'vulnerability': 'Potential Directory Traversal',
                 'severity': 'High',
-                'location': f'Path: {path}',
-                'url': url
+                'location': f'Path: {payload}',
+                'id': _id
             })
 
     return vulnerabilities
 
+
 # Get JSON input from the user
 json_input = input("Enter the JSON input:")
 
+# Specify the path to the .txt file containing API paths
+api_path_file = 'api_payloads.txt'  # Replace with your actual file path
+
 # Identifying vulnerabilities
-vulnerabilities_found = identify_api_vulnerabilities(json_input)
+vulnerabilities_found = identify_api_vulnerabilities(json_input, api_path_file)
 
 # Convert vulnerabilities to JSON format
 vulnerabilities_json = json.dumps(vulnerabilities_found, indent=2)

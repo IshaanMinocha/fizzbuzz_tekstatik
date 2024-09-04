@@ -1,16 +1,19 @@
 import json
 import re
 
-def identify_hidden_directory_vulnerabilities(json_input):
-    # List of hidden or sensitive directories that signify high-risk vulnerabilities
-    hidden_directories = [
-        '/.git/', '/.svn/', '/CVS/', '/.env', '/.htaccess', '/.htpasswd', '/.gitignore',
-        '/.idea/', '/.vscode/', '/.config/', '/.well-known/', '/.DS_Store', '/.metadata',
-        '/backup/', '/old/', '/temp/', '/tmp/', '/logs/', '/private/', '/secure/',
-        '/test/', '/staging/', '/dev/', '/debug/', '/config/', '/admin/', '/hidden/',
-        '/secret/', '/assets/', '/uploads/', '/files/', '/archive/', '/bkp/', '/dump/',
-        '/debug.log', '/error.log', '/access.log', '/.backup', '/backup.zip', '/.bak',
-    ]
+def read_payloads(hidden_directories):
+    try:
+        with open(hidden_directories, 'r') as file:
+            # Read each line, strip newline characters, and store it in a list
+            payloads = [line.strip() for line in file.readlines()]
+        return payloads
+    except FileNotFoundError:
+        print(f"File {hidden_directories} not found.")
+        return []
+
+def identify_hidden_directory_vulnerabilities(json_input, hidden_directories):
+    # Read API paths from the specified .txt file
+    api_paths = read_payloads(hidden_directories)
 
     # Regular expressions for identifying potential vulnerabilities
     sql_injection_patterns = [
@@ -35,130 +38,83 @@ def identify_hidden_directory_vulnerabilities(json_input):
 
     # Analyzing each entry in the JSON data
     for entry in data:
-        path = entry.get('path', '')
-        status = entry.get('status')
-        url = entry.get('url', '')
-        response_body = entry.get('response_body', '')
-        headers = entry.get('headers', {})
+        payload = entry.get('payload', '')
+        response = entry.get('response')
+        _id = entry.get('_id', '')
 
-        # Check for hidden directories
-        if any(hidden_dir in path for hidden_dir in hidden_directories):
+        if any(hidden_dir in payload for hidden_dir in hidden_directories):
             vulnerabilities.append({
-                'vulnerability': 'Exposed hidden or sensitive directory',
+                'vulnerability': 'Exposed or Misconfigured hidden directories',
                 'severity': 'High',
-                'location': f'Hidden Directory: {path}',
-                'url': url
+                'location': f'hidden Directory: {payload}',
+                'id': _id
             })
 
-        # Check for status code vulnerabilities
-        if status == 200 and any(hidden_dir in path for hidden_dir in hidden_directories):
+        # Check for response code vulnerabilities
+        if response == '200' and any(hidden_dir in payload for hidden_dir in hidden_directories):
             vulnerabilities.append({
-                'vulnerability': 'Sensitive information exposure in hidden directory',
+                'vulnerability': 'Sensitive data exposure in hidden directory',
                 'severity': 'High',
-                'location': f'Accessible Hidden Directory: {path}',
-                'url': url
+                'location': f'Accessible Hidden Directory {payload}',
+                'id': _id
             })
-        elif status == 403 and any(hidden_dir in path for hidden_dir in hidden_directories):
+        elif response == '403' and any(hidden_dir in payload for hidden_dir in hidden_directories):
             vulnerabilities.append({
                 'vulnerability': 'Restricted hidden directory - potential misconfiguration',
                 'severity': 'Medium',
-                'location': f'Restricted Hidden Directory: {path}',
-                'url': url
+                'location': f'Restricted Hidden Directory: {payload}',
+                'id': _id
             })
-        elif status == 500:
+        elif response == '500':
             vulnerabilities.append({
-                'vulnerability': 'Server Misconfiguration or Error',
+                'vulnerability': 'Server Misconfiguration or Error in hidden directories',
                 'severity': 'Medium',
-                'location': f'Path causing server error: {path}',
-                'url': url
+                'location': f'Path causing server error: {payload}',
+                'id': _id
             })
 
-        # Check for SQL Injection vulnerabilities
+        # Check for potential SQL Injection vulnerabilities
         for pattern in sql_injection_patterns:
-            if re.search(pattern, path, re.IGNORECASE):
+            if re.search(pattern, payload, re.IGNORECASE):
                 vulnerabilities.append({
                     'vulnerability': 'Potential SQL Injection',
                     'severity': 'High',
-                    'location': f'Path: {path}',
-                    'url': url
+                    'location': f'Path: {payload}',
+                    'id': _id
                 })
                 break
 
-        # Check for XSS vulnerabilities
+        # Check for potential XSS vulnerabilities
         for pattern in xss_patterns:
-            if re.search(pattern, path, re.IGNORECASE):
+            if re.search(pattern, payload, re.IGNORECASE):
                 vulnerabilities.append({
                     'vulnerability': 'Potential Cross-Site Scripting (XSS)',
                     'severity': 'High',
-                    'location': f'Path: {path}',
-                    'url': url
+                    'location': f'Path: {payload}',
+                    'id': _id
                 })
                 break
 
         # Check for potential directory traversal
-        if '..' in path:
+        if '..' in payload:
             vulnerabilities.append({
                 'vulnerability': 'Potential Directory Traversal',
                 'severity': 'High',
-                'location': f'Path: {path}',
-                'url': url
+                'location': f'Path: {payload}',
+                'id': _id
             })
 
     return vulnerabilities
 
-# Sample JSON input
-json_input = '''
-[
-  {
-    "path": "/.git/config",
-    "status": 200,
-    "size": 54321,
-    "words": 234,
-    "lines": 12,
-    "duration": "0.234s",
-    "url": "http://example.com/.git/config"
-  },
-  {
-    "path": "/backup.zip",
-    "status": 403,
-    "size": 67890,
-    "words": 456,
-    "lines": 20,
-    "duration": "0.456s",
-    "url": "http://example.com/backup.zip"
-  },
-  {
-    "path": "/logs/error.log",
-    "status": 200,
-    "size": 5678,
-    "words": 123,
-    "lines": 5,
-    "duration": "0.234s",
-    "url": "http://example.com/logs/error.log"
-  },
-  {
-    "path": "/.env",
-    "status": 403,
-    "size": 1234,
-    "words": 10,
-    "lines": 2,
-    "duration": "0.345s",
-    "url": "http://example.com/.env"
-  },
-  {
-    "path": "/../../etc/passwd",
-    "status": 403,
-    "size": 1234,
-    "words": 10,
-    "lines": 2,
-    "duration": "0.345s",
-    "url": "http://example.com/../../etc/passwd"
-  }
-]
-'''
+
+# Get JSON input from the user
+json_input = input("Enter the JSON input:")
+
+# Specify the path to the .txt file containing API paths
+hidden_directories = 'Directories_All.wordlist.txt'  # Replace with your actual file path
 
 # Identifying vulnerabilities
-vulnerabilities_found = identify_hidden_directory_vulnerabilities(json_input)
+vulnerabilities_found = identify_hidden_directory_vulnerabilities(json_input, hidden_directories)
 
 # Convert vulnerabilities to JSON format
 vulnerabilities_json = json.dumps(vulnerabilities_found, indent=2)
