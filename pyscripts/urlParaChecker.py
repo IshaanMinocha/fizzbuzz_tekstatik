@@ -1,25 +1,23 @@
 import json
 import re
 
-def identify_url_parameter_vulnerabilities(json_input):
-    # Regular expressions for identifying potential vulnerabilities in URL parameters
-    sql_injection_patterns = [
-        r"'.*--",
-        r"union.*select",
-        r"insert.*into",
-        r"delete.*from",
-        r"drop.*table",
-        r"select.*from.*where.*",
-        r"union.*all.*select"
-    ]
+def read_patterns(file_path):
+    try:
+        with open(file_path, 'r') as file:
+            patterns = [line.strip() for line in file.readlines()]
+        return patterns
+    except FileNotFoundError:
+        print(f"File {file_path} not found.")
+        return []
 
-    xss_patterns = [
-        r"<script>",
-        r"javascript:",
-        r"onerror=",
-        r"onload=",
-        r"alert\(.*\)"
-    ]
+def identify_url_parameter_vulnerabilities(json_input):
+    # File paths to the patterns files
+    sql_patterns_file = 'sql_injection_patterns.txt'
+    xss_patterns_file = 'xss_patterns.txt'
+
+    # Read patterns from files
+    sql_injection_patterns = read_patterns(sql_patterns_file)
+    xss_patterns = read_patterns(xss_patterns_file)
 
     vulnerabilities = []
 
@@ -72,44 +70,6 @@ def identify_url_parameter_vulnerabilities(json_input):
                         })
 
     return vulnerabilities
-
-# Sample JSON input
-json_input = '''
-[
-  {
-    "url": "http://example.com/api/v1/search?q=user' OR '1'='1",
-    "status": 200,
-    "size": 54321,
-    "words": 234,
-    "lines": 12,
-    "duration": "0.234s"
-  },
-  {
-    "url": "http://example.com/api/v1/login?user=admin&password=<script>alert('XSS')</script>",
-    "status": 200,
-    "size": 67890,
-    "words": 456,
-    "lines": 20,
-    "duration": "0.456s"
-  },
-  {
-    "url": "http://example.com/api/v1/profile?token=abc123",
-    "status": 200,
-    "size": 5678,
-    "words": 123,
-    "lines": 5,
-    "duration": "0.234s"
-  },
-  {
-    "url": "http://example.com/api/v1/submit?password=secret",
-    "status": 200,
-    "size": 1234,
-    "words": 10,
-    "lines": 2,
-    "duration": "0.345s"
-  }
-]
-'''
 
 # Identifying vulnerabilities
 vulnerabilities_found = identify_url_parameter_vulnerabilities(json_input)

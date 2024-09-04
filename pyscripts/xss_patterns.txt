@@ -1,0 +1,13 @@
+<script>
+javascript:
+onerror=
+onload=
+alert\(.*\)
+document.cookie=
+document.write(
+eval\(.*\)
+window.location=
+window.open(
+<img src="x" onerror=
+<svg/onload=alert(
+<iframe/src=javascript:

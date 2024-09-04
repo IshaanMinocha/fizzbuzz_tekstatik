@@ -1,0 +1,15 @@
+'.*--
+union.*select
+insert.*into
+delete.*from
+drop.*table
+select.*from.*where.*
+union.*all.*select
+select.*from.*information_schema.tables
+select.*from.*mysql.db
+' OR '1'='1
+" OR "1"="1
+' OR '1'='1'--
+" OR "1"="1"-- 
+' UNION SELECT NULL, NULL, NULL--
+' OR EXISTS (SELECT * FROM users WHERE username = 'admin' AND password = 'password')--
