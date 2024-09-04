@@ -52,84 +52,75 @@ def identify_api_vulnerabilities(json_input, api_path_file):
 
     # Analyzing each entry in the JSON data
     for entry in data:
-        path = entry.get('path', '')
-        status = entry.get('status')
-        url = entry.get('url', '')
-        headers = entry.get('headers', {})
+        payload = entry.get('payload', '')
+        response = entry.get('response')
+        _id = entry.get('_id', '')
 
         # Check for exposed API paths
-        if any(api_path in path for api_path in api_paths):
+        if any(api_path in payload for api_path in api_paths):
             vulnerabilities.append({
                 'vulnerability': 'Exposed or Misconfigured API Endpoint',
                 'severity': 'High',
-                'location': f'API Endpoint: {path}',
-                'url': url
+                'location': f'API Endpoint: {payload}',
+                'id': _id
             })
 
-        # Check for status code vulnerabilities
-        if status == 200 and any(api_path in path for api_path in api_paths):
+        # Check for response code vulnerabilities
+        if response == '200' and any(api_path in payload for api_path in api_paths):
             vulnerabilities.append({
                 'vulnerability': 'Sensitive data exposure in API endpoint',
                 'severity': 'High',
-                'location': f'Accessible API Endpoint: {path}',
-                'url': url
+                'location': f'Accessible API Endpoint: {payload}',
+                'id': _id
             })
-        elif status == 403 and any(api_path in path for api_path in api_paths):
+        elif response == '403' and any(api_path in payload for api_path in api_paths):
             vulnerabilities.append({
                 'vulnerability': 'Restricted API endpoint - potential misconfiguration',
                 'severity': 'Medium',
-                'location': f'Restricted API Endpoint: {path}',
-                'url': url
+                'location': f'Restricted API Endpoint: {payload}',
+                'id': _id
             })
-        elif status == 500:
+        elif response == '500':
             vulnerabilities.append({
                 'vulnerability': 'Server Misconfiguration or Error in API Endpoint',
                 'severity': 'Medium',
-                'location': f'Path causing server error: {path}',
-                'url': url
+                'location': f'Path causing server error: {payload}',
+                'id': _id
             })
 
-        # Check for Server Information Exposure
-        if 'server' in headers:
-            vulnerabilities.append({
-                'vulnerability': 'Server Information Exposure',
-                'severity': 'Low',
-                'location': f'Server Header: {headers["server"]}',
-                'url': url
-            })
-
-        # Check for SQL Injection vulnerabilities
+        # Check for potential SQL Injection vulnerabilities
         for pattern in sql_injection_patterns:
-            if re.search(pattern, path, re.IGNORECASE):
+            if re.search(pattern, payload, re.IGNORECASE):
                 vulnerabilities.append({
                     'vulnerability': 'Potential SQL Injection',
                     'severity': 'High',
-                    'location': f'Path: {path}',
-                    'url': url
+                    'location': f'Path: {payload}',
+                    'id': _id
                 })
                 break
 
-        # Check for XSS vulnerabilities
+        # Check for potential XSS vulnerabilities
         for pattern in xss_patterns:
-            if re.search(pattern, path, re.IGNORECASE):
+            if re.search(pattern, payload, re.IGNORECASE):
                 vulnerabilities.append({
                     'vulnerability': 'Potential Cross-Site Scripting (XSS)',
                     'severity': 'High',
-                    'location': f'Path: {path}',
-                    'url': url
+                    'location': f'Path: {payload}',
+                    'id': _id
                 })
                 break
 
         # Check for potential directory traversal
-        if '..' in path:
+        if '..' in payload:
             vulnerabilities.append({
                 'vulnerability': 'Potential Directory Traversal',
                 'severity': 'High',
-                'location': f'Path: {path}',
-                'url': url
+                'location': f'Path: {payload}',
+                'id': _id
             })
 
     return vulnerabilities
+
 
 # Get JSON input from the user
 json_input = input("Enter the JSON input:")
