@@ -2,12 +2,6 @@ import json
 import re
 
 def read_payloads(hidden_directories):
-    """
-    Reads payloads (API paths) from a .txt file specified by file_path.
-    
-    :param file_path: Path to the .txt file containing API paths.
-    :return: A list of API paths.
-    """
     try:
         with open(hidden_directories, 'r') as file:
             # Read each line, strip newline characters, and store it in a list
@@ -17,15 +11,7 @@ def read_payloads(hidden_directories):
         print(f"File {hidden_directories} not found.")
         return []
 
-def identify_api_vulnerabilities(json_input, hidden_directories):
-    """
-    Identifies vulnerabilities in API endpoints based on predefined API paths
-    and other patterns, using the API paths read from a .txt file.
-    
-    :param json_input: JSON input containing API details.
-    :param api_path_file: Path to the .txt file containing API paths.
-    :return: A list of detected vulnerabilities.
-    """
+def identify_hidden_directory_vulnerabilities(json_input, hidden_directories):
     # Read API paths from the specified .txt file
     api_paths = read_payloads(hidden_directories)
 
@@ -56,12 +42,11 @@ def identify_api_vulnerabilities(json_input, hidden_directories):
         response = entry.get('response')
         _id = entry.get('_id', '')
 
-        # Check for exposed API paths
         if any(hidden_dir in payload for hidden_dir in hidden_directories):
             vulnerabilities.append({
-                'vulnerability': 'Exposed or Misconfigured API Endpoint',
+                'vulnerability': 'Exposed or Misconfigured hidden directories',
                 'severity': 'High',
-                'location': f'API Endpoint: {payload}',
+                'location': f'hidden Directory: {payload}',
                 'id': _id
             })
 
@@ -82,7 +67,7 @@ def identify_api_vulnerabilities(json_input, hidden_directories):
             })
         elif response == '500':
             vulnerabilities.append({
-                'vulnerability': 'Server Misconfiguration or Error in API Endpoint',
+                'vulnerability': 'Server Misconfiguration or Error in hidden directories',
                 'severity': 'Medium',
                 'location': f'Path causing server error: {payload}',
                 'id': _id
@@ -129,7 +114,7 @@ json_input = input("Enter the JSON input:")
 hidden_directories = 'Directories_All.wordlist.txt'  # Replace with your actual file path
 
 # Identifying vulnerabilities
-vulnerabilities_found = identify_api_vulnerabilities(json_input, api_path_file)
+vulnerabilities_found = identify_hidden_directory_vulnerabilities(json_input, hidden_directories)
 
 # Convert vulnerabilities to JSON format
 vulnerabilities_json = json.dumps(vulnerabilities_found, indent=2)
