@@ -16,8 +16,8 @@ def identify_subdomain_vulnerabilities(json_input):
         'blog', 'test', 'shop', 'images', 'static', 'admin-panel', 'user'
     ]
 
-    # Status codes to check
-    status_code_checks = {
+    # response codes to check
+    response_code_checks = {
         200: 'Sensitive information exposure',
         403: 'Restricted area - potential misconfiguration',
         404: 'Not found - potential orphaned subdomain',
@@ -32,25 +32,28 @@ def identify_subdomain_vulnerabilities(json_input):
     # Analyzing each entry in the JSON data
     for entry in data:
         subdomain = entry.get('subdomain', '')
-        status = entry.get('status')
+        response = entry.get('response')
         url = entry.get('url', '')
-
+        _id = entry.get('_id', '')
+        
         # Check for common vulnerable subdomains
         if any(vuln_subdomain in subdomain for vuln_subdomain in vulnerable_subdomains):
             vulnerabilities.append({
                 'vulnerability': 'Common Vulnerable Subdomain',
                 'severity': 'High',
                 'location': f'Subdomain: {subdomain}',
-                'url': url
+                'url': url,
+                'id': _id
             })
 
-        # Check for status code vulnerabilities
-        if status in status_code_checks:
+        # Check for response code vulnerabilities
+        if response in response_code_checks:
             vulnerabilities.append({
-                'vulnerability': status_code_checks[status],
-                'severity': 'High' if status == 200 else 'Medium',
+                'vulnerability': response_code_checks[response],
+                'severity': 'High' if response == 200 else 'Medium',
                 'location': f'Subdomain: {subdomain}',
-                'url': url
+                'url': url,
+                'id': _id
             })
 
     return vulnerabilities
@@ -60,32 +63,32 @@ json_input = '''
 [
   {
     "subdomain": "admin.example.com",
-    "status": 200,
+    "response": 200,
     "url": "http://admin.example.com"
   },
   {
     "subdomain": "test.example.com",
-    "status": 403,
+    "response": 403,
     "url": "http://test.example.com"
   },
   {
     "subdomain": "ftp.example.com",
-    "status": 404,
+    "response": 404,
     "url": "http://ftp.example.com"
   },
   {
     "subdomain": "old.example.com",
-    "status": 500,
+    "response": 500,
     "url": "http://old.example.com"
   },
   {
     "subdomain": "api.example.com",
-    "status": 200,
+    "response": 200,
     "url": "http://api.example.com"
   },
   {
     "subdomain": "support.example.com",
-    "status": 403,
+    "response": 403,
     "url": "http://support.example.com"
   }
 ]
