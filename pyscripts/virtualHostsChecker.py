@@ -13,7 +13,7 @@ def read_payloads(vhosts):
 
 def vhosts_vulnerabilities(json_input, vhosts):
     # Read API paths from the specified .txt file
-    api_paths = read_payloads(vhosts)
+    vhosts = read_payloads(vhosts)
 
     # Regular expressions for identifying potential vulnerabilities
     sql_injection_patterns = [
