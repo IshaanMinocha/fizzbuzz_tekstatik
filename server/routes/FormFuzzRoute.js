@@ -4,7 +4,8 @@ import { promisify } from 'util';
 
 const router = express.Router();
 const execPromise = promisify(exec);
-const payloadFilePath = "/mnt/c/Users/Ishaan Minocha/Desktop/sih24/fizzbuzz/payloads/payload-form.txt";
+// const payloadFilePath = "/mnt/c/Users/Ishaan Minocha/Desktop/sih24/fizzbuzz/payloads/payload-form.txt";
+const payloadFilePath = "/mnt/c/Users/acer/Desktop/fizzbuzz_tekstatic/payloads/payload-form.txt";
 
 // code to parse stdout to return proper json output
 const parseWfuzzOutput = (output) => {

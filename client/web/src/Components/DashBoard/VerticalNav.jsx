@@ -10,8 +10,13 @@ const VerticalNavbar = () => {
   const path = location.pathname;
 
   const isActive = (route) => path === route ? 'bg-indigo-600 text-white' : 'text-gray-400 hover:text-white';
-
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+  
+    window.location.href = '/';
+  };
   return (
+    
     <div className="hidden md:flex md:w-64 md:flex-col">
       <div className="flex flex-col flex-grow h-[400px] bg-gray-800 justify-center ml-6 rounded-lg">
         <div className="flex flex-col flex-1 px-3 justify-center">
@@ -56,6 +61,7 @@ const VerticalNavbar = () => {
 
             <nav className="flex-1 space-y-2">
               <button
+               onClick={handleLogout}
                 className="flex items-center px-4 py-2.5 text-sm font-medium transition-all duration-200 text-black w-full justify-center hover:text-white rounded-lg hover:bg-indigo-600 group bg-white"
               >
                Logout

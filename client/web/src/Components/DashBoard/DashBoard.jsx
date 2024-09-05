@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import VerticalNavbar from './VerticalNav';
 import VulnerabilityTable from './VulnerabilityTable';
 import FuzzResultTable from './FuzzResultTable';
+import VulnerabilityResolution from './VulnerabilityResolution';
 
 const DashBoard = () => {
   const location = useLocation();
@@ -15,7 +16,7 @@ const DashBoard = () => {
   } else if (path === '/dashboard/fuzzresult') {
     Content = <FuzzResultTable />;
   } else if(path  === '/dashboard/resolution'){
-    Content = <VulnerabilityTable/>;
+    Content = <VulnerabilityResolution/>;
   }
   
 
