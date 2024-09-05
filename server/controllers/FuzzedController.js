@@ -4,7 +4,8 @@ import FuzzResult from '../models/FuzzedModel.js';
 
 const getAllFuzzResults = asyncHandler(async (req, res) => {
     try {
-        const fuzzResults = await FuzzResult.find().populate('user', 'name email');
+        // const fuzzResults = await FuzzResult.find().populate('user', 'name email');
+        const fuzzResults = await FuzzResult.find({ user: req.user._id }).populate('user', 'name email');
         res.status(200).json(
             {
                 success: true,
@@ -22,7 +23,11 @@ const getAllFuzzResults = asyncHandler(async (req, res) => {
 
 const getFuzzResultById = asyncHandler(async (req, res) => {
     try {
-        const fuzzResult = await FuzzResult.findById(req.params.id).populate('user', 'name email');
+        // const fuzzResult = await FuzzResult.findById(req.params.id).populate('user', 'name email');
+        const fuzzResult = await FuzzResult.findOne({
+            _id: req.params.id,
+            user: req.user._id
+        }).populate('user', 'name email');
         if (!fuzzResult) {
             return res.status(404).json({
                 success: false,

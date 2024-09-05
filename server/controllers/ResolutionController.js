@@ -6,6 +6,7 @@ const getAllResolutions = asyncHandler(async (req, res) => {
         const resolutions = await Resolution.find()
             .populate({
                 path: 'vulnerability',
+                match: { user: req.user._id },
                 select: 'targetUrl severity fuzzType',
             });
         res.status(200).json({
@@ -27,6 +28,7 @@ const getResolutionById = asyncHandler(async (req, res) => {
         const resolution = await Resolution.findById(req.params.id)
             .populate({
                 path: 'vulnerability',
+                match: { user: req.user._id },
                 select: 'targetUrl severity fuzzType',
             });
         if (!resolution) {
