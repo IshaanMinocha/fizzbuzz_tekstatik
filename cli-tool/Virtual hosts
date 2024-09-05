@@ -1,0 +1,27 @@
+Target: http://testphp.vulnweb.com/FUZZ
+Total requests: 17
+==================================================================
+ID    Response   Lines      Word         Chars          Request    
+==================================================================
+00013:  C=404      7 L	      11 W	    153 Ch	  "secure.example.com"
+00001:  C=404      7 L	      11 W	    153 Ch	  "localhost"
+00006:  C=404      7 L	      11 W	    153 Ch	  "admin.local"
+00003:  C=404      7 L	      11 W	    153 Ch	  "dev.local"
+00014:  C=404      7 L	      11 W	    153 Ch	  "test.example.com"
+00015:  C=404      7 L	      11 W	    153 Ch	  "admin.example.com"
+00012:  C=404      7 L	      11 W	    153 Ch	  "example.com"
+00007:  C=404      7 L	      11 W	    153 Ch	  "api.local"
+00016:  C=404      7 L	      11 W	    153 Ch	  "api.example.com"
+00017:  C=404      7 L	      11 W	    153 Ch	  "dev.example.com"
+00010:  C=404      7 L	      11 W	    153 Ch	  "local.example.com"
+00009:  C=404      7 L	      11 W	    153 Ch	  "demo.local"
+00008:  C=404      7 L	      11 W	    153 Ch	  "internal.local"
+00004:  C=404      7 L	      11 W	    153 Ch	  "staging.local"
+00005:  C=404      7 L	      11 W	    153 Ch	  "production.local"
+00011:  C=404      7 L	      11 W	    153 Ch	  "www.example.com"
+00002:  C=404      7 L	      11 W	    153 Ch	  "test.local"
+
+Total time: 0
+Processed Requests: 17
+Filtered Requests: 0
+Requests/sec.: 0

@@ -19,11 +19,19 @@ const saveFuzzResult = async (fuzzResultData) => {
         const userId = decodedToken.id;
         console.log(userId);
 
+        const group = await FuzzResult.getNextGroup(userId);
+
+        if (isNaN(group)) {
+            throw new Error("Group value is NaN. Unable to proceed.");
+        }
+        console.log(`Group value assigned: ${group}`);  // Debugging
+
         const fuzzResult = new FuzzResult({
             user: userId,
             output: fuzzResultData.output,  // This is the array of results
             targetUrl: fuzzResultData.targetUrl,
-            fuzzType: fuzzResultData.fuzzType
+            fuzzType: fuzzResultData.fuzzType,
+            group: group  
         });
 
         // for (const result of fuzzResultData.output) {

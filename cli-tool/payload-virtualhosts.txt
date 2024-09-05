@@ -1,0 +1,17 @@
+localhost
+test.local
+dev.local
+staging.local
+production.local
+admin.local
+api.local
+internal.local
+demo.local
+local.example.com
+www.example.com
+example.com
+secure.example.com
+test.example.com
+admin.example.com
+api.example.com
+dev.example.com

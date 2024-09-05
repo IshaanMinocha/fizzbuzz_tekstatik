@@ -36,7 +36,8 @@ def parse_output(output):
 if __name__ == "__main__":
     url = sys.argv[1]
     flags = sys.argv[2:]
-
+    fuzz_type = sys.argv[5]
+    
     stdout, stderr = run_wfuzz(url, flags)
 
     if stderr:
@@ -45,7 +46,7 @@ if __name__ == "__main__":
         results = parse_output(stdout)
         fuzz_data = {
             "targetUrl": url,
-            "fuzzType": "All Detect",  # Or dynamically set this if possible
+            "fuzzType": fuzz_type,  
             "output": results
         }
         json_output = json.dumps(fuzz_data, indent=4)
