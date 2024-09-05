@@ -110,28 +110,28 @@ def identify_api_vulnerabilities(data, api_path_file):
                 'location': f'Restricted API Endpoint: {payload}',
                 'id': _id
             })
-        elif response == '500':
+        elif response == '500' and contains_api_path:
             vulnerabilities.append({
                 'vulnerability': 'Server Misconfiguration or Injection Vulnerabilities',
                 'severity': 'Critical',
                 'location': f'Path causing server error: {payload}',
                 'id': _id
             })
-        elif response == '502':
+        elif response == '502' and contains_api_path:
             vulnerabilities.append({
                 'vulnerability': 'Misconfigured Proxies or Gateways or Network-Based Attacks',
                 'severity': 'Low',
                 'location': f'Path causing server error: {payload}',
                 'id': _id
             })
-        elif response == '503':
+        elif response == '503' and contains_api_path:
             vulnerabilities.append({
                 'vulnerability': 'Denial of Service',
                 'severity': 'High',
                 'location': f'Path causing server error: {payload}',
                 'id': _id
             })
-        elif response == '429':
+        elif response == '429' and contains_api_path:
             vulnerabilities.append({
                 'vulnerability': 'Rate Limiting Bypass or Denial of Service',
                 'severity': 'High',
@@ -177,7 +177,40 @@ def identify_api_vulnerabilities(data, api_path_file):
     }
 
 # Get JSON input from the user
-json_input =input("enter input")
+json_input = '''
+{
+  "fuzzType": "apiendpoint",
+  "targetUrl": "http://example.com",
+  "results": [
+    {
+      "_id": "1",
+      "payload": "/api/user/1",
+      "response": "200"
+    },
+    {
+      "_id": "2",
+      "payload": "/api/admin",
+      "response": "403"
+    },
+    {
+      "_id": "3",
+      "payload": "/api/search?q=1' OR '1'='1",
+      "response": "500"
+    },
+    {
+      "_id": "4",
+      "payload": "/api/images/../../etc/passwd",
+      "response": "404"
+    },
+    {
+      "_id": "5",
+      "payload": "/api/xss<script>alert('xss')</script>",
+      "response": "200"
+    }
+  ]
+}
+'''
+
 try:
     # Load JSON input from the user
     data = json.loads(json_input)
