@@ -11,9 +11,16 @@ def read_payloads(vhosts):
         print(f"File {vhosts} not found.")
         return []
 
-def vhosts_vulnerabilities(json_input, vhosts):
-    # Read vhost paths from the specified .txt file
-    vhosts = read_payloads(vhosts)
+def vhosts_vulnerabilities(data, vhosts):
+    if data.get("fuzzType") != "virtualHosts":
+        print("Fuzz type is not 'virtualHosts'. No vulnerabilities identified.")
+        return {
+            "targetUrl": data.get("targetUrl", ""),
+            "fuzzType": data.get("fuzzType", ""),
+            "vulnerabilities": []
+        }
+    # Read host paths from the specified .txt file
+    vhosts_paths = read_payloads(vhosts)
 
     # Regular expressions for identifying potential vulnerabilities
     sql_injection_patterns = [
@@ -33,16 +40,21 @@ def vhosts_vulnerabilities(json_input, vhosts):
 
     vulnerabilities = []
 
-    # Load the JSON input
-    data = json.loads(json_input)
+    # Extracting targetUrl and fuzzType from input data
+    target_url = data.get("targetUrl", "")
+    fuzz_type = data.get("fuzzType", "")
+    results = data.get("results", [])
 
     # Analyzing each entry in the JSON data
-    for entry in data:
+    for entry in results:
         payload = entry.get('payload', '')
         response = entry.get('response')
         _id = entry.get('_id', '')
 
-        if any(vh_path in payload for vh_path in vhosts):
+        # Check if the payload contains any API path
+        contains_vhost_path = any(payload.startswith(vhost_path) for vhost_path in vhosts_paths)
+
+        if contains_vhost_path:
             vulnerabilities.append({
                 'vulnerability': 'Exposed or Misconfigured virtual host',
                 'severity': 'High',
@@ -51,24 +63,73 @@ def vhosts_vulnerabilities(json_input, vhosts):
             })
 
         # Check for response code vulnerabilities
-        if response == '200' and any(vh_path in payload for vh_path in vhosts):
+        if response == '200' and contains_vhost_path:
             vulnerabilities.append({
-                'vulnerability': 'Sensitive data exposure in virtual host',
+                'vulnerability': 'Sensitive data exposure/ Broken Authentication',
                 'severity': 'High',
                 'location': f'Accessible virtual host {payload}',
                 'id': _id
             })
-        elif response == '403' and any(vh_path in payload for vh_path in vhosts):
+        elif response == '301' and contains_vhost_path:
             vulnerabilities.append({
-                'vulnerability': 'Restricted virtual host - potential misconfiguration',
-                'severity': 'Medium',
-                'location': f'Restricted virtual host: {payload}',
+                'vulnerability': 'Open Redirect/ Information Disclosure',
+                'severity': 'High',
+                'location': f'Accessible API Endpoint: {payload}',
                 'id': _id
             })
-        elif response == '500':
+        elif response == '401' and contains_vhost_path:
             vulnerabilities.append({
-                'vulnerability': 'Server Misconfiguration or Error in virtual host',
+                'vulnerability': 'Broken Authentication and Session Management',
+                'severity': 'High',
+                'location': f'Restricted API Endpoint: {payload}',
+                'id': _id
+            })
+        elif response == '403' and contains_vhost_path:
+            vulnerabilities.append({
+                'vulnerability': 'Bypass using HTTP methods',
+                'severity': 'High',
+                'location': f'Restricted API Endpoint: {payload}',
+                'id': _id
+            })
+        elif response == '404' and contains_vhost_path:
+            vulnerabilities.append({
+                'vulnerability': 'Endpoint Enumeration/ Information Disclosure',
                 'severity': 'Medium',
+                'location': f'Restricted API Endpoint: {payload}',
+                'id': _id
+            })
+        elif response == '405' and contains_vhost_path:
+            vulnerabilities.append({
+                'vulnerability': 'HTTP Verb Tampering/ Improper Security Configuration',
+                'severity': 'Medium',
+                'location': f'Restricted API Endpoint: {payload}',
+                'id': _id
+            })
+        elif response == '500' and contains_vhost_path:
+            vulnerabilities.append({
+                'vulnerability': 'Server Misconfiguration or Injection Vulnerabilities',
+                'severity': 'Critical',
+                'location': f'Path causing server error: {payload}',
+                'id': _id
+            })
+        elif response == '502' and contains_vhost_path:
+            vulnerabilities.append({
+                'vulnerability': 'Misconfigured Proxies or Gateways or Network-Based Attacks',
+                'severity': 'Low',
+                'location': f'Path causing server error: {payload}',
+                'id': _id
+            })
+        elif response == '503' and contains_vhost_path:
+            vulnerabilities.append({
+                'vulnerability': 'Denial of Service',
+                'severity': 'High',
+                'location': f'Path causing server error: {payload}',
+                'id': _id
+            })
+        elif response == '429' and contains_vhost_path:
+            vulnerabilities.append({
+                'vulnerability': 'Rate Limiting Bypass or Denial of Service',
+                'severity': 'High',
                 'location': f'Path causing server error: {payload}',
                 'id': _id
             })
@@ -104,17 +165,27 @@ def vhosts_vulnerabilities(json_input, vhosts):
                 'id': _id
             })
 
-    return vulnerabilities
-
+    return {
+        "targetUrl": target_url,
+        "fuzzType": fuzz_type,
+        "vulnerabilities": vulnerabilities
+    }
 
 # Get JSON input from the user
-json_input = input("Enter the JSON input:")
+json_input = input("Enter input")
+
+try:
+    # Load JSON input from the user
+    data = json.loads(json_input)
+except json.JSONDecodeError:
+    print("Invalid JSON input. Please provide valid JSON.")
+    data = {}
 
 # Specify the path to the .txt file containing virtual hosts paths
-vhosts = '../../payloads/vhosts.txt'  # Replace with your actual file path
+vhosts = 'vh0sts.txt'  # Replace with your actual file path
 
 # Identifying vulnerabilities
-vulnerabilities_found = vhosts_vulnerabilities(json_input, vhosts)
+vulnerabilities_found = vhosts_vulnerabilities(data, vhosts)
 
 # Convert vulnerabilities to JSON format
 vulnerabilities_json = json.dumps(vulnerabilities_found, indent=2)
