@@ -41,12 +41,29 @@ const fuzzResultSchema = new mongoose.Schema({
         type: String, 
         required: true 
     },
-    //createdAt: { type: Date, default: Date.now }
+    group: { 
+        type: Number, 
+        required: true 
+    },  
 },
     {
         timestamps: true,
         collection : 'FuzzResult'
     });
+
+fuzzResultSchema.statics.getNextGroup = async function (userId) {
+    const lastResult = await this.findOne({ user: userId }).sort({ group: -1 });
+    
+    if (!lastResult) {
+        console.log(`No previous results found for user ${userId}, starting group at 1.`);
+    } else {
+        console.log(`Last group for user ${userId} is ${lastResult.group}. Incrementing group.`);
+    }
+    
+    const nextGroup = lastResult ? lastResult.group + 1 : 1;
+    return nextGroup;
+};
+    
 
 const FuzzResult = mongoose.model('FuzzResult', fuzzResultSchema);
 
