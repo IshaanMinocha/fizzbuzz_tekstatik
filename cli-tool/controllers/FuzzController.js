@@ -31,7 +31,7 @@ const saveFuzzResult = async (fuzzResultData) => {
             output: fuzzResultData.output,  // This is the array of results
             targetUrl: fuzzResultData.targetUrl,
             fuzzType: fuzzResultData.fuzzType,
-            group: group  // Set the group number
+            group: group  
         });
 
         // for (const result of fuzzResultData.output) {

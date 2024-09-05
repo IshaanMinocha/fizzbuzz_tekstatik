@@ -44,17 +44,21 @@ program
     .command('fuzz <url>')
     // .description('Fuzz a target URL using wfuzz')
     .option('-w, --wordlist <path>', 'Path to the wordlist')
+    .option('-f, --fuzzType <type>', 'Type of fuzzing (e.g., API endpoints, virtual hosts, SQL injection)')
     .option('-H, --header <header>', 'Add headers to the request')
     .option('-b, --cookie <cookie>', 'Add cookies to the request')
     .option('-d, --data <data>', 'Send data in the body of the request (for POST requests)')
     .option('-X, --method <method>', 'Specify the HTTP method (GET, POST, etc.)')
-    .option('-t, --threads <number>', 'Number of threads')
     .option('-c, --color', 'Show output in color')
+
     .action((url, options) => {
         const flags = [];
 
         if (options.wordlist) {
             flags.push(`-z file,${options.wordlist}`);
+        }
+        if (options.fuzzType) {
+            flags.push(`-f "${options.fuzzType}"`)
         }
         if (options.header) {
             flags.push(`-H "${options.header}"`);
@@ -68,9 +72,7 @@ program
         if (options.method) {
             flags.push(`-X ${options.method}`);
         }
-        if (options.threads) {
-            flags.push(`-t ${options.threads}`);
-        }
+       
         if (options.color) {
             flags.push('-c');
         }
