@@ -1,7 +1,7 @@
 // Popup script
-document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('highlightBtn').addEventListener('click', function() {
-    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+document.addEventListener('DOMContentLoaded', function () {
+  document.getElementById('highlightBtn').addEventListener('click', function () {
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       chrome.scripting.executeScript({
         target: { tabId: tabs[0].id },
         function: highlightRequestGeneratingElements
@@ -9,8 +9,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  document.getElementById('logRequestsBtn').addEventListener('click', function() {
-    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+  document.getElementById('logRequestsBtn').addEventListener('click', function () {
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       chrome.scripting.executeScript({
         target: { tabId: tabs[0].id },
         function: injectNetworkLogger
@@ -19,12 +19,57 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-document.getElementById("fuzzBtn").addEventListener('click', function() {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        let activeTab = tabs[0].id;
-        chrome.tabs.sendMessage(activeTab, { action:"fuzz"});
+// document.getElementById("fuzzBtn").addEventListener('click', function() {
+//   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+//         let activeTab = tabs[0].id;
+//         chrome.tabs.sendMessage(activeTab, { action:"fuzz"});
+//     });
+// })
+
+// for sending data to server to fuzz
+document.getElementById("fuzzBtn").addEventListener("click", function () {
+  document.getElementById("fuzzFormContainer").style.display = "block";
+});
+
+document.getElementById("addFieldBtn").addEventListener("click", function () {
+  let fieldContainer = document.createElement("div");
+  fieldContainer.innerHTML = '<input type="text" placeholder="Field Name" class="fieldName" />';
+  document.getElementById("formFields").appendChild(fieldContainer);
+});
+
+document.getElementById("submitFuzzBtn").addEventListener("click", function () {
+  let endpoint = document.getElementById("endpointInput").value;
+  let httpMethod = document.getElementById("httpMethod").value;
+  let fieldNames = Array.from(document.querySelectorAll(".fieldName")).map(input => input.value);
+
+  let data = {
+    endpoint: endpoint,
+    method: httpMethod,
+    fields: fieldNames
+  };
+
+  fetch('http://localhost:5000/chrome-wfuzz/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById("fuzzFormContainer").style.display = "none";
+
+      let resultsContainer = document.getElementById("resultsContainer");
+      resultsContainer.style.display = "block";
+      let resultsElement = document.getElementById("results");
+      resultsElement.textContent = JSON.stringify(data, null, 2);
+
+      console.log('Fuzzing results:', data);
+    })
+    .catch(error => {
+      console.error('Error:', error);
     });
-})
+});
 
 function highlightRequestGeneratingElements() {
   const elements = document.querySelectorAll('a, form, input[type="submit"], button[type="submit"], button, input[type="button"], input[type="image"]');
@@ -73,7 +118,7 @@ function injectNetworkLogger() {
           type: 'xmlhttprequest',
           url: entry.name,
           initiatorType: entry.initiatorType,
-          status : entry.responseStatus
+          status: entry.responseStatus
         });
       }
     });
@@ -88,21 +133,21 @@ function injectNetworkLogger() {
         type: 'xmlhttprequest',
         url: entry.name,
         initiatorType: entry.initiatorType,
-        status : entry.responseStatus
+        status: entry.responseStatus
       });
     }
   });
 }
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if(message.action === "fuzzResponse") {
+  if (message.action === "fuzzResponse") {
     console.log(message)
-    document.getElementById("fuzzLink").innerHTML = message.link;  
+    document.getElementById("fuzzLink").innerHTML = message.link;
   }
 })
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.type === 'xmlhttprequest' && message.status !== 0) {  
+  if (message.type === 'xmlhttprequest' && message.status !== 0) {
     const tableBody = document.querySelector('#requestsTable tbody');
     if (tableBody) {
       const row = document.createElement('tr');

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vulnerability Checker</title>
+  <title>FizzBuzz Vulnerability Checker</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -102,6 +102,59 @@
     td a:hover {
       text-decoration: underline;
     }
+    #fuzzFormContainer {
+      margin-top: 20px;
+      background-color: #333333;
+      padding: 20px;
+      border-radius: 8px;
+    }
+
+    #fuzzFormContainer input, 
+    #fuzzFormContainer select,
+    #fuzzFormContainer button {
+      display: block;
+      width: calc(100% - 24px); 
+      margin: 10px auto;
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 8px;
+      border: 1px solid #555555;
+      background-color: #222222;
+      color: #ffffff;
+    }
+
+    #fuzzFormContainer input, 
+    #fuzzFormContainer select {
+      background-color: #222222;
+      border: 1px solid #555555;
+    }
+
+    #fuzzFormContainer button {
+      background-color: #333333;
+      border: 2px solid #555555;
+      cursor: pointer;
+    }
+
+    #fuzzFormContainer button:hover {
+      background-color: #444444;
+      border-color: #666666;
+    }
+
+    #formFields {
+      margin-top: 10px;
+    }
+
+    #addFieldBtn,
+    #submitFuzzBtn {
+      background-color: #444444;
+      border: 2px solid #666666;
+    }
+    
+    #addFieldBtn:hover,
+    #submitFuzzBtn:hover {
+      background-color: #555555;
+      border-color: #777777;
+    }
   </style>
 </head>
 <body>
@@ -111,9 +164,26 @@
     <button class="custom-button" id="logRequestsBtn" style="margin-left: 10px;"><span>Log Requests</span></button>
     <button class="custom-button" id="fuzzBtn" style="margin-left: 10px;"><span>Fuzz</span></button>
   </div>
-  <div id="fuzzLink">
-    Get link here!
+  <div id="fuzzFormContainer" style="display: none; margin-top: 10px;">
+    <input type="text" id="endpointInput" placeholder="Enter Endpoint URL" />
+    <select id="httpMethod">
+      <option value="POST" selected>POST</option>
+      <option value="GET">GET</option>
+      <option value="PUT">PUT</option>
+      <option value="DELETE">DELETE</option>
+    </select>
+    <div id="formFields"></div>
+    <button id="addFieldBtn">Add Field</button>
+    <button id="submitFuzzBtn">Submit</button>
   </div>
+  <div id="resultsContainer" style="display: none; margin-top: 20px;">
+    <h3>Fuzzing Results</h3>
+    <pre id="results"></pre>
+    <h3>Check your dashboard for detailed vulnerability showcase!</h3>
+  </div>
+  <!-- <div id="fuzzLink">
+    Get link here!
+  </div> -->
   <table id="requestsTable">
     <thead>
       <tr>

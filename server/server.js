@@ -6,6 +6,7 @@ import userRouter from './routes/UserRoute.js'
 import fuzzedRouter from './routes/FuzzedRoute.js'
 import vulnerabilityRouter from './routes/VulnerabilityRoute.js'
 import resolutionRouter from './routes/ResolutionRoute.js'
+import chromeFuzzRouter from './routes/FormFuzzRoute.js'
 
 envConfig();
 
@@ -22,6 +23,7 @@ server.use('/user', userRouter);
 server.use('/fuzz', fuzzedRouter);
 server.use('/vulnerability', vulnerabilityRouter);
 server.use('/resolution', resolutionRouter);
+server.use('/chrome-wfuzz', chromeFuzzRouter);
 
 const startServer = async () => {
     try {

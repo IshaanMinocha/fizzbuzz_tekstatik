@@ -28,3 +28,13 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     sendResponse({ status: 'success' });
   }
 });
+
+let backendUrl = '';
+
+fetch(chrome.runtime.getURL('config.json'))
+  .then(response => response.json())
+  .then(config => {
+    backendUrl = config.BACKEND_URL;
+    console.log('Backend URL:', backendUrl);
+  })
+  .catch(error => console.error('Error loading config:', error));
