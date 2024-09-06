@@ -4,8 +4,8 @@ import json
 import re
 
 def run_wfuzz(url, flags):
-    #command = ["wsl", "wfuzz"] + flags + [url] # win with wsl 
-    command = ["wfuzz"] + flags + [url] # mac
+    command = ["wsl", "wfuzz"] + flags + [url] # win with wsl 
+    # command = ["wfuzz"] + flags + [url] # mac
     result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
     return result.stdout, result.stderr
 

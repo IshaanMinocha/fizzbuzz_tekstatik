@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import FuzzResult from '../models/FuzzModel.js';
 import os from 'os';
-import express from 'express';
+// import express from 'express';
 
 const homeDir = os.homedir();
 const TOKEN_PATH = path.resolve(homeDir, '.fizzbuzz_token');
