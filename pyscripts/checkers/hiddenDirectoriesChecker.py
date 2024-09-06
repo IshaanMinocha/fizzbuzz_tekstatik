@@ -5,40 +5,50 @@ import re
 def identify_hidden_directory_vulnerabilities(json_input):
     # Hardcoded payload lists for each status code
     payloads_by_status = {
-        '200': [
-            '/admin', '/dashboard', '/settings', '/profile', '/api/v1/users', '/api/v1/logout',
-            '/api/v1/orders', '/notifications', '/api/v1/register', '/api/v1/login', '/api/v1/products'
-        ],
-        '301': [
-            '/admin'
-        ],
-        '401': [
-            '/admin', '/dashboard', '/settings', '/profile', '/api/v1/users'
-        ],
-        '403': [
-            '/admin', '/dashboard', '/settings', '/profile'
-        ],
-        '404': [
-            '/search', '/dashboard', '/settings', '/profile', '/api/v1/orders', '/notifications',
-            '/api/v2/users', '/api/v2/logout', '/api/v2/register', '/api/v2/login', '/api/v2/products',
-            '/hidden', '/backup', '/old', '/private', '/.git', '/.env'
-        ],
-        '405': [
-            '/api/v1/products', '/api/v2/products'
-        ],
-        '429': [
-            '/admin', '/api/v1/orders'
-        ],
-        '500': [
-            '/api/v1/login'
-        ],
-        '502': [
-            '/api/v1/logout'
-        ],
-        '503': [
-            '/search'
-        ]
-    }
+    '200': [
+        '/admin', '/dashboard', '/settings', '/profile', '/api/v1/users', '/api/v1/logout',
+        '/api/v1/orders', '/notifications', '/api/v1/register', '/api/v1/login', '/api/v1/products',
+        '/api/v1/admin', '/config', '/.htaccess', '/.bash_history', '/.aws/credentials',
+        '/api/v1/logs', '/backup.zip', '/debug', '/.git/config', '/phpinfo', '/status', '/env'
+    ],
+    '301': [
+        '/admin', '/old', '/backup', '/redirect', '/moved', '/api/v1', '/secure', '/login', '/signin'
+    ],
+    '401': [
+        '/admin', '/dashboard', '/settings', '/profile', '/api/v1/users', '/private', '/.env',
+        '/api/v1/admin', '/api/v1/config', '/restricted', '/api/v1/secure', '/db', '/wp-admin'
+    ],
+    '403': [
+        '/admin', '/dashboard', '/settings', '/profile', '/private', '/hidden', '/secure', '/config',
+        '/api/v1/protected', '/.htpasswd', '/forbidden', '/user/settings', '/.git', '/restricted'
+    ],
+    '404': [
+        '/api/v1/orders', '/api/v2/users', '/api/v2/logout', '/api/v2/register', '/api/v2/login',
+        '/hidden', '/backup', '/old', '/private', '/.git', '/.env', '/404', '/.svn', '/cgi-bin',
+        '/nonexistent', '/void', '/unused', '/api/v1/notfound'
+    ],
+    '405': [
+        '/api/v1/products', '/api/v2/products', '/api/v1/invalid', '/notallowed', '/blocked', 
+        '/methodnotallowed', '/wrong/method'
+    ],
+    '429': [
+        '/admin', '/api/v1/orders', '/rate/limit', '/exceeded', '/throttled', '/retry/after',
+        '/api/v2/limit', '/flood', '/slowdown'
+    ],
+    '500': [
+        '/api/v1/login', '/api/v1/fault', '/internal/error', '/server/broken', '/crash', 
+        '/api/v1/issues', '/malfunction', '/fail', '/error', '/db/error'
+    ],
+    '502': [
+        '/api/v1/logout', '/bad/gateway', '/proxy/error', '/502', '/server/bad', '/gateway/fail',
+        '/network/error', '/downstream', '/upstream/fail', '/proxy/fail'
+    ],
+    '503': [
+        '/search', '/maintenance', '/temporarily/down', '/unavailable', '/api/v1/maintenance', 
+        '/retry/later', '/busy', '/offline', '/overloaded', '/service/unavailable'
+    ]
+}
+
 
     # Regular expressions for identifying potential vulnerabilities
     sql_injection_patterns = [
