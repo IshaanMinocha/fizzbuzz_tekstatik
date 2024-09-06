@@ -172,7 +172,28 @@ def vhosts_vulnerabilities(data, vhosts):
     }
 
 # Get JSON input from the user
-json_input = input("Enter input")
+json_input ='''{
+    "fuzzType": "virtualHosts",
+    "targetUrl": "http://example.com",
+    "results": [
+        {
+            "payload": "http://example.com/admin",
+            "response": "200",
+            "_id": "123"
+        },
+        {
+            "payload": "http://example.com/test",
+            "response": "404",
+            "_id": "124"
+        },
+        {
+            "payload": "http://example.com/../../etc/passwd",
+            "response": "500",
+            "_id": "125"
+        }
+    ]
+}
+'''
 
 try:
     # Load JSON input from the user
