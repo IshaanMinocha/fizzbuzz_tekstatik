@@ -18,7 +18,7 @@ const SignIn = () => {
       if (response.data.success) {
   
         localStorage.setItem("authToken", response.data.token);
-        navigate("/dashboard/vulnerability");
+        navigate("/dashboard/");
       } else {
         setError(response.data.message);
       }

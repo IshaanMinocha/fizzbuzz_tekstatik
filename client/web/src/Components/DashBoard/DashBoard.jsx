@@ -4,6 +4,7 @@ import VerticalNavbar from './VerticalNav';
 import VulnerabilityTable from './VulnerabilityTable';
 import FuzzResultTable from './FuzzResultTable';
 import VulnerabilityResolution from './VulnerabilityResolution';
+import Charts from './Charts';
 
 const DashBoard = () => {
   const location = useLocation();
@@ -17,6 +18,9 @@ const DashBoard = () => {
     Content = <FuzzResultTable />;
   } else if(path  === '/dashboard/resolution'){
     Content = <VulnerabilityResolution/>;
+  }
+  else if(path  === '/dashboard/'){
+    Content = <Charts/>;
   }
   
 

@@ -1,0 +1,17 @@
+Target: http://testphp.vulnweb.com/FUZZ
+Total requests: 7
+==================================================================
+ID    Response   Lines      Word         Chars          Request    
+==================================================================
+00007:  C=301      7 L	      11 W	    169 Ch	  "images"
+00001:  C=301      7 L	      11 W	    169 Ch	  "admin"
+00004:  C=404      7 L	      11 W	    153 Ch	  "config"
+00006:  C=404      7 L	      11 W	    153 Ch	  "files"
+00002:  C=404      7 L	      11 W	    153 Ch	  "login"
+00005:  C=404      7 L	      11 W	    153 Ch	  "uploads"
+00003:  C=404      7 L	      11 W	    153 Ch	  "test"
+
+Total time: 0
+Processed Requests: 7
+Filtered Requests: 0
+Requests/sec.: 0
