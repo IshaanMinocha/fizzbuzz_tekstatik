@@ -4,6 +4,8 @@ import { GrVulnerability } from "react-icons/gr";
 import { HiChartBar } from "react-icons/hi2";
 import { VscCommentUnresolved } from "react-icons/vsc";
 import { FaBook } from "react-icons/fa6";
+import { IoAnalytics } from "react-icons/io5";
+
 
 const VerticalNavbar = () => {
   const location = useLocation();
@@ -45,6 +47,13 @@ const VerticalNavbar = () => {
               >
                 <VscCommentUnresolved className="mr-3"/>
                 Resolution
+              </a>
+              <a
+                href="/dashboard/analytics"
+                className={`flex items-center px-4 py-2.5 text-sm font-medium transition-all duration-200 rounded-lg group ${isActive('/dashboard/analytics')}`}
+              >
+                <IoAnalytics className='mr-3'/>
+                Analytics 
               </a>
 
               <a
