@@ -35,7 +35,7 @@ const Charts = () => {
     <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
       {/* Vulnerabilities Pie Chart */}
       <div style={{ width: '45%', minWidth: '300px', margin: '20px 0' }}>
-        <h3>Vulnerabilities by Severity</h3>
+        <h3 className='text-white'>Vulnerabilities by Severity</h3>
         <ResponsiveContainer width="100%" height={300}>
           <PieChart>
             <Pie
@@ -60,7 +60,7 @@ const Charts = () => {
 
       {/* Fuzz Results Bar Chart */}
       <div style={{ width: '45%', minWidth: '300px', margin: '20px 0' }}>
-        <h3>Fuzz Results per User</h3>
+        <h3 className='text-white'>Fuzz Results per User</h3>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart
             data={barData}

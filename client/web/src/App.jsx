@@ -44,10 +44,10 @@ function App() {
             element={
               <ProtectedRoute>
                 <Routes>
+                  <Route path="" element={<DashBoard />} />
                   <Route path="vulnerability" element={<DashBoard />} />
                   <Route path="fuzzresult" element={<DashBoard />} />
                   <Route path="resolution" element={<DashBoard />} />
-                  <Route path="analytics" element={<DashBoard />} />
                 </Routes>
               </ProtectedRoute>
             } 

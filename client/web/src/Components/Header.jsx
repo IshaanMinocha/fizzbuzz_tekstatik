@@ -107,7 +107,7 @@ const Links = ({ isLoggedIn }) => {
       <GlassLink text="Home" href={"/"} />
       <GlassLink 
         text="DashBoard" 
-        href={"/dashboard/vulnerability"} 
+        href={"/dashboard/"} 
         onClick={handleDashboardClick}
       />
     </div>

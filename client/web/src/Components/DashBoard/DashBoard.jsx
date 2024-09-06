@@ -19,7 +19,7 @@ const DashBoard = () => {
   } else if(path  === '/dashboard/resolution'){
     Content = <VulnerabilityResolution/>;
   }
-  else if(path  === '/dashboard/analytics'){
+  else if(path  === '/dashboard/'){
     Content = <Charts/>;
   }
   
