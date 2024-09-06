@@ -1,0 +1,28 @@
+Target: https://trailwatch.onrender.com/FUZZ
+Total requests: 18
+==================================================================
+ID    Response   Lines      Word         Chars          Request    
+==================================================================
+00013:  C=404     10 L	      15 W	    145 Ch	  "/admin"
+00001:  C=404     10 L	      15 W	    152 Ch	  "/api/v1/users"
+00017:  C=404     10 L	      15 W	    146 Ch	  "/search"
+00011:  C=404     10 L	      15 W	    155 Ch	  "/api/v2/register"
+00015:  C=404     10 L	      15 W	    148 Ch	  "/settings"
+00003:  C=404     10 L	      15 W	    153 Ch	  "/api/v1/orders"
+00012:  C=404     10 L	      15 W	    153 Ch	  "/api/v2/logout"
+00007:  C=404     10 L	      15 W	    152 Ch	  "/api/v2/users"
+00014:  C=404     10 L	      15 W	    149 Ch	  "/dashboard"
+00009:  C=404     10 L	      15 W	    153 Ch	  "/api/v2/orders"
+00010:  C=404     10 L	      15 W	    152 Ch	  "/api/v2/login"
+00006:  C=404     10 L	      15 W	    153 Ch	  "/api/v1/logout"
+00008:  C=404     10 L	      15 W	    155 Ch	  "/api/v2/products"
+00005:  C=404     10 L	      15 W	    155 Ch	  "/api/v1/register"
+00002:  C=404     10 L	      15 W	    155 Ch	  "/api/v1/products"
+00018:  C=404     10 L	      15 W	    153 Ch	  "/notifications"
+00004:  C=404     10 L	      15 W	    152 Ch	  "/api/v1/login"
+00016:  C=404     10 L	      15 W	    147 Ch	  "/profile"
+
+Total time: 0
+Processed Requests: 18
+Filtered Requests: 0
+Requests/sec.: 0

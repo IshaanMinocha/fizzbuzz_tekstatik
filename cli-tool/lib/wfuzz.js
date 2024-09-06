@@ -10,8 +10,8 @@ const __dirname = path.dirname(__filename);
 export const runWfuzz = (url, flags) => {
     const pythonScriptPath = path.join(__dirname, '../../pyscripts/wfuzz_script.py');
 
-    //const command = `python "${pythonScriptPath}" ${url} ${flags.join(' ')}`; //win
-    const command = `python3 ${pythonScriptPath} ${url} ${flags.join(' ')}`; //mac
+    const command = `python "${pythonScriptPath}" ${url} ${flags.join(' ')}`; //win
+    // const command = `python3 ${pythonScriptPath} ${url} ${flags.join(' ')}`; //mac
 
     console.log(`Running command: ${command}`);
 
