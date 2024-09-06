@@ -3,24 +3,24 @@ Total requests: 18
 ==================================================================
 ID    Response   Lines      Word         Chars          Request    
 ==================================================================
+00015:  C=404      7 L	      11 W	    153 Ch	  "/settings"
+00001:  C=404      7 L	      11 W	    153 Ch	  "/api/v1/users"
 00016:  C=404      7 L	      11 W	    153 Ch	  "/profile"
+00018:  C=404      7 L	      11 W	    153 Ch	  "/notifications"
 00014:  C=404      7 L	      11 W	    153 Ch	  "/dashboard"
+00006:  C=404      7 L	      11 W	    153 Ch	  "/api/v1/logout"
+00003:  C=404      7 L	      11 W	    153 Ch	  "/api/v1/orders"
+00017:  C=404      7 L	      11 W	    153 Ch	  "/search"
 00007:  C=404      7 L	      11 W	    153 Ch	  "/api/v2/users"
 00012:  C=404      7 L	      11 W	    153 Ch	  "/api/v2/logout"
-00017:  C=404      7 L	      11 W	    153 Ch	  "/search"
-00003:  C=404      7 L	      11 W	    153 Ch	  "/api/v1/orders"
-00006:  C=404      7 L	      11 W	    153 Ch	  "/api/v1/logout"
-00015:  C=404      7 L	      11 W	    153 Ch	  "/settings"
-00018:  C=404      7 L	      11 W	    153 Ch	  "/notifications"
-00001:  C=404      7 L	      11 W	    153 Ch	  "/api/v1/users"
-00013:  C=301      7 L	      11 W	    169 Ch	  "/admin"
-00004:  C=404      7 L	      11 W	    153 Ch	  "/api/v1/login"
-00011:  C=404      7 L	      11 W	    153 Ch	  "/api/v2/register"
-00008:  C=404      7 L	      11 W	    153 Ch	  "/api/v2/products"
 00009:  C=404      7 L	      11 W	    153 Ch	  "/api/v2/orders"
+00013:  C=301      7 L	      11 W	    169 Ch	  "/admin"
 00005:  C=404      7 L	      11 W	    153 Ch	  "/api/v1/register"
-00010:  C=404      7 L	      11 W	    153 Ch	  "/api/v2/login"
+00004:  C=404      7 L	      11 W	    153 Ch	  "/api/v1/login"
 00002:  C=404      7 L	      11 W	    153 Ch	  "/api/v1/products"
+00008:  C=404      7 L	      11 W	    153 Ch	  "/api/v2/products"
+00011:  C=404      7 L	      11 W	    153 Ch	  "/api/v2/register"
+00010:  C=404      7 L	      11 W	    153 Ch	  "/api/v2/login"
 
 Total time: 0
 Processed Requests: 18
