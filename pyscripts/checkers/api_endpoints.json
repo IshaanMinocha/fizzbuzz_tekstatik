@@ -1,0 +1,157 @@
+{
+    "_id": "66e4391cdf2c11b82cfc6a40",
+    "user": "66d4c8691e989296671f808b",
+    "output": [
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "/profile",
+        "_id": "66da65589744b0f15a67d1e2"
+      },
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "/api/v1/users",
+        "_id": "66da65589744b0f15a67d1e3"
+      },
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "/dashboard",
+        "_id": "66da65589744b0f15a67d1e4"
+      },
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "/notifications",
+        "_id": "66da65589744b0f15a67d1e5"
+      },
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "/api/v2/logout",
+        "_id": "66da65589744b0f15a67d1e6"
+      },
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "/api/v1/orders",
+        "_id": "66da65589744b0f15a67d1e7"
+      },
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "/api/v2/users",
+        "_id": "66da65589744b0f15a67d1e8"
+      },
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "/api/v1/logout",
+        "_id": "66da65589744b0f15a67d1e9"
+      },
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "/search",
+        "_id": "66da65589744b0f15a67d1ea"
+      },
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "/settings",
+        "_id": "66da65589744b0f15a67d1eb"
+      },
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "/api/v1/register",
+        "_id": "66da65589744b0f15a67d1ec"
+      },
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "/api/v2/register",
+        "_id": "66da65589744b0f15a67d1ed"
+      },
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "/api/v2/products",
+        "_id": "66da65589744b0f15a67d1ee"
+      },
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "/api/v1/login",
+        "_id": "66da65589744b0f15a67d1ef"
+      },
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "/api/v2/login",
+        "_id": "66da65589744b0f15a67d1f0"
+      },
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "/api/v1/products",
+        "_id": "66da65589744b0f15a67d1f1"
+      },
+      {
+        "response": "301",
+        "lines": 7,
+        "words": 11,
+        "chars": 169,
+        "payload": "/admin",
+        "_id": "66da65589744b0f15a67d1f2"
+      },
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "/api/v2/orders",
+        "_id": "66da65589744b0f15a67d1f3"
+      }
+    ],
+    "targetUrl": "http://testphp.vulnweb.com/FUZZ",
+    "fuzzType": "API endpoints",
+    "group": 1,
+    "createdAt": 1725588824752,
+    "updatedAt": 1725588824752,
+    "__v": 0
+  }
+  

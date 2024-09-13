@@ -1,0 +1,149 @@
+{
+    "_id": "66e43bbedf2c11b82cfc6a41",
+    "user": "66d4c8691e989296671f808b",
+    "output": [
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "secure.example.com",
+        "_id": "66da65ae2bda3a088dd1957d"
+      },
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "localhost",
+        "_id": "66da65ae2bda3a088dd1957e"
+      },
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "test.example.com",
+        "_id": "66da65ae2bda3a088dd1957f"
+      },
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "dev.example.com",
+        "_id": "66da65ae2bda3a088dd19580"
+      },
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "example.com",
+        "_id": "66da65ae2bda3a088dd19581"
+      },
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "dev.local",
+        "_id": "66da65ae2bda3a088dd19582"
+      },
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "api.local",
+        "_id": "66da65ae2bda3a088dd19583"
+      },
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "admin.local",
+        "_id": "66da65ae2bda3a088dd19584"
+      },
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "api.example.com",
+        "_id": "66da65ae2bda3a088dd19585"
+      },
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "admin.example.com",
+        "_id": "66da65ae2bda3a088dd19586"
+      },
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "www.example.com",
+        "_id": "66da65ae2bda3a088dd19587"
+      },
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "local.example.com",
+        "_id": "66da65ae2bda3a088dd19588"
+      },
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "test.local",
+        "_id": "66da65ae2bda3a088dd19589"
+      },
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "staging.local",
+        "_id": "66da65ae2bda3a088dd1958a"
+      },
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "internal.local",
+        "_id": "66da65ae2bda3a088dd1958b"
+      },
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "production.local",
+        "_id": "66da65ae2bda3a088dd1958c"
+      },
+      {
+        "response": "404",
+        "lines": 7,
+        "words": 11,
+        "chars": 153,
+        "payload": "demo.local",
+        "_id": "66da65ae2bda3a088dd1958d"
+      }
+    ],
+    "targetUrl": "http://testphp.vulnweb.com/FUZZ",
+    "fuzzType": "Virtual hosts",
+    "group": 2,
+    "createdAt": 1725588910371,
+    "updatedAt": 1725588910371,
+    "__v": 0
+  }
+  
