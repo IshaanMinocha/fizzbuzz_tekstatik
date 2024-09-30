@@ -36,6 +36,76 @@ export const vulnerabilities = [
       targetUrl: 'http://example.org',
       fuzzType: 'Type 2'
     },
+    {
+      id: 2,
+      user: 'User 2',
+      output: {
+        response: 'Response 3',
+        lines: 120,
+        words: 600,
+        chars: 3000,
+        timeTaken: '6s',
+        payload: 'Payload 2'
+      },
+      targetUrl: 'http://example.org',
+      fuzzType: 'Type 2'
+    },
+    {
+      id: 3,
+      user: 'User 3',
+      output: {
+        response: 'Response 3',
+        lines: 120,
+        words: 600,
+        chars: 3000,
+        timeTaken: '6s',
+        payload: 'Payload 2'
+      },
+      targetUrl: 'http://example.org',
+      fuzzType: 'Type 2'
+    },
+    {
+      id: 3,
+      user: 'User 3',
+      output: {
+        response: 'Response 3',
+        lines: 120,
+        words: 600,
+        chars: 3000,
+        timeTaken: '6s',
+        payload: 'Payload 2'
+      },
+      targetUrl: 'http://example.org',
+      fuzzType: 'Type 2'
+    },
+    {
+      id: 3,
+      user: 'User 3',
+      output: {
+        response: 'Response 3',
+        lines: 120,
+        words: 600,
+        chars: 3000,
+        timeTaken: '6s',
+        payload: 'Payload 2'
+      },
+      targetUrl: 'http://example.org',
+      fuzzType: 'Type 2'
+    },
+    {
+      id: 4,
+      user: 'User 4',
+      output: {
+        response: 'Response 3',
+        lines: 120,
+        words: 600,
+        chars: 3000,
+        timeTaken: '6s',
+        payload: 'Payload 2'
+      },
+      targetUrl: 'http://example.org',
+      fuzzType: 'Type 2'
+    },
  
   ];
   

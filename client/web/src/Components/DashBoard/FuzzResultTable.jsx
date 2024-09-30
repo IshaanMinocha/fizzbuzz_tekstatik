@@ -43,34 +43,7 @@ const fuzzResultData = [
     targetUrl: 'http://example.org',
     fuzzType: 'Type 2'
   },
-  {
-    id: 2,
-    user: 'User 2',
-    output: {
-      response: 'Response 2',
-      lines: 120,
-      words: 600,
-      chars: 3000,
-      timeTaken: '6s',
-      payload: 'Payload 2'
-    },
-    targetUrl: 'http://example.org',
-    fuzzType: 'Type 2'
-  },
-  {
-    id: 2,
-    user: 'User 2',
-    output: {
-      response: 'Response 2',
-      lines: 120,
-      words: 600,
-      chars: 3000,
-      timeTaken: '6s',
-      payload: 'Payload 2'
-    },
-    targetUrl: 'http://example.org',
-    fuzzType: 'Type 2'
-  },
+ 
 
 ];
 

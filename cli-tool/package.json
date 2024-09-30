@@ -19,6 +19,7 @@
     "commander": "^12.1.0",
     "dotenv": "^16.4.5",
     "express-async-handler": "^1.2.0",
+    "fizzbuzz": "file:",
     "fs": "^0.0.1-security",
     "inquirer": "^10.1.8",
     "jsonwebtoken": "^9.0.2",

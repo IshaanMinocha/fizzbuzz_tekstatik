@@ -14,7 +14,12 @@ function Footer() {
                             <a href="#features-section" className="text-2xl hover:underline me-4">Features</a>
                         </li>
                         <li>
-                            <a href="/" className="text-2xl hover:underline me-4">Download</a>
+                            <a 
+                            href="/public/chrome-extension.zip" 
+                            className="text-2xl hover:underline me-4"
+                            download={'chome-extension.zip'}
+                            
+                            >Download</a>
                         </li>
                     </ul>
                 </div>
