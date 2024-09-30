@@ -1,10 +1,11 @@
 import { motion } from "framer-motion";
 import { twMerge } from "tailwind-merge";
-import axios from "axios"; 
+import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
+
   return (
     <div className="bg-zinc-950 py-20 text-zinc-200 selection:bg-zinc-600 pt-28">
       <motion.div
@@ -49,20 +50,21 @@ const Email = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/user/register", {
+      const response = await axios.post(`${backendUrl}/user/register`, {
         name,
         email,
         password,
       });
 
       if (response.data.success) {
-      
-        navigate("/signin"); 
+
+        navigate("/signin");
       } else {
         alert(response.data.message);
       }
