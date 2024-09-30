@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { SiGithub } from "react-icons/si";
 import { motion } from "framer-motion";
 import { twMerge } from "tailwind-merge";
 
@@ -10,13 +9,14 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   const handleSignIn = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/user/login", { email, password });
+      const response = await axios.post(`${backendUrl}/user/login`, { email, password });
       if (response.data.success) {
-  
+
         localStorage.setItem("authToken", response.data.token);
         navigate("/dashboard/");
       } else {
