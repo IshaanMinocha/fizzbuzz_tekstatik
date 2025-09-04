@@ -1,7 +1,7 @@
 # FizzBuzz 
 ## by team tekstatik
 
-made for sih 2024
+SIH 2024 Finalist project
 
 
 
